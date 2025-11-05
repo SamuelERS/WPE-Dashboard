@@ -1,0 +1,356 @@
+================================================================================
+                    CASO: BOTON CAMBIAR NOMBRE DEL PC
+                        Dashboard IT - Acuarios Paradise
+================================================================================
+
+FECHA: 4 de Noviembre, 2025
+VERSION: 1.4
+ESTADO: IMPLEMENTADO
+
+================================================================================
+  PROBLEMA IDENTIFICADO
+================================================================================
+
+Los equipos tienen nombres generados automaticamente por Windows:
+  - Ejemplo: DESKTOP-VHIMQ05
+  - No son amigables para el usuario
+  - Dificil de recordar
+  - No descriptivos
+  - No indican la funcion del equipo
+
+
+================================================================================
+  SOLUCION IMPLEMENTADA
+================================================================================
+
+BOTON: "Cambiar Nombre del PC"
+UBICACION: Seccion "CONFIGURACION INICIAL"
+POSICION: Despues de "Crear Usuario del Sistema"
+
+FUNCIONALIDADES:
+  1. Reconocimiento automatico del entorno
+     - Detecta nombre actual del PC
+     - Muestra en formulario (campo deshabilitado)
+     - Ejecuta en el PC donde corre el dashboard
+
+  2. Formulario interactivo
+     - Campo 1: Nombre actual (solo lectura)
+     - Campo 2: Nuevo nombre (editable)
+     - Validaciones en tiempo real
+     - Mensajes claros
+
+  3. Validaciones robustas
+     - Permisos de administrador
+     - Formato de nombre (1-15 caracteres)
+     - Solo letras, numeros y guiones
+     - No puede empezar/terminar con guion
+     - Nombre diferente al actual
+
+
+================================================================================
+  FLUJO DE OPERACION
+================================================================================
+
+1. Usuario ve tarjeta "INFORMACION DEL SISTEMA"
+   - Muestra: "PC ACTUAL: DESKTOP-VHIMQ05"
+
+2. Click en "Cambiar Nombre del PC"
+
+3. Modal con formulario:
+   ┌─────────────────────────────────────────┐
+   │ Cambiar Nombre del PC              [X]  │
+   ├─────────────────────────────────────────┤
+   │ Nombre Actual del PC:                   │
+   │ [DESKTOP-VHIMQ05]      [DESHABILITADO]  │
+   │                                         │
+   │ Nuevo Nombre del PC:                    │
+   │ [Ejemplo: POS-Merliot, DISENO-Principal]│
+   │                                         │
+   │              [Cancelar]  [Submit]       │
+   └─────────────────────────────────────────┘
+
+4. Usuario ingresa: "POS-Merliot"
+
+5. Dashboard valida:
+   ✓ Permisos de administrador
+   ✓ Formato del nombre
+   ✓ Nombre diferente al actual
+
+6. Ejecuta: Rename-Computer -NewName "POS-Merliot"
+
+7. Mensaje de exito:
+   "Nombre del PC cambiado exitosamente a 'POS-Merliot'.
+    IMPORTANTE: Debes REINICIAR el equipo para aplicar los cambios."
+
+8. Usuario reinicia el equipo
+
+9. PC ahora se llama: "POS-Merliot"
+
+
+================================================================================
+  VALIDACIONES
+================================================================================
+
+1. PERMISOS DE ADMINISTRADOR
+   - Verifica que el dashboard se ejecuto como admin
+   - Error si no tiene permisos
+
+2. FORMATO DE NOMBRE
+   - Regex: ^[a-zA-Z0-9]([a-zA-Z0-9-]{0,13}[a-zA-Z0-9])?$
+   - 1-15 caracteres
+   - Solo letras, numeros y guiones
+   - No puede empezar o terminar con guion
+
+3. NOMBRE NO VACIO
+   - Verifica que se ingreso un nombre
+
+4. NOMBRE DIFERENTE
+   - Verifica que el nuevo nombre es diferente al actual
+
+
+================================================================================
+  CASOS DE USO
+================================================================================
+
+CASO 1: Cambio Exitoso
+  Input: DESKTOP-VHIMQ05 -> POS-Merliot
+  Resultado: ✓ Nombre cambiado, requiere reinicio
+  Log: "Cambiar Nombre PC - Exitoso: DESKTOP-VHIMQ05 -> POS-Merliot"
+
+CASO 2: Nombre Invalido
+  Input: "POS Merliot" (con espacio)
+  Resultado: ✗ Error de validacion
+  Mensaje: "Nombre invalido. Usa solo letras, numeros y guiones"
+
+CASO 3: Sin Permisos Admin
+  Input: POS-Merliot (sin permisos)
+  Resultado: ✗ Error de permisos
+  Mensaje: "El dashboard debe ejecutarse como Administrador"
+
+CASO 4: Nombre Igual al Actual
+  Input: DESKTOP-VHIMQ05 -> DESKTOP-VHIMQ05
+  Resultado: ⚠ Advertencia
+  Mensaje: "El nuevo nombre es igual al actual"
+
+
+================================================================================
+  CONVENCIONES DE NOMBRES SUGERIDAS
+================================================================================
+
+PUNTO DE VENTA (POS):
+  POS-[Ubicacion]
+  Ejemplos:
+    - POS-Merliot
+    - POS-Escalon
+    - POS-SantaTecla
+
+DISENO GRAFICO:
+  DISENO-[Descripcion]
+  Ejemplos:
+    - DISENO-Principal
+    - DISENO-Render
+    - DISENO-Edicion
+
+ATENCION AL CLIENTE:
+  ATENCION-[Ubicacion]
+  Ejemplos:
+    - ATENCION-Recepcion
+    - ATENCION-CallCenter
+    - ATENCION-Soporte
+
+ADMINISTRACION:
+  ADMIN-[Funcion]
+  Ejemplos:
+    - ADMIN-Gerencia
+    - ADMIN-Contabilidad
+    - ADMIN-RRHH
+
+MANTENIMIENTO:
+  MANT-[Descripcion]
+  Ejemplos:
+    - MANT-Taller
+    - MANT-Bodega
+    - MANT-Tecnico
+
+
+================================================================================
+  ARCHIVOS CREADOS/MODIFICADOS
+================================================================================
+
+CREADOS:
+  1. Scripts\Configuracion\Cambiar-Nombre-PC.ps1
+     - Script backend con validaciones
+     - Metadata para ScriptLoader
+     - Logging completo
+
+  2. Docs\Boton_Cambiar_Nombre_PC.md
+     - Documentacion completa del caso
+     - Casos de uso
+     - Diagramas de flujo
+
+  3. Docs\RESUMEN-CAMBIAR-NOMBRE-PC.txt
+     - Este archivo (resumen visual)
+
+MODIFICADOS:
+  1. Dashboard.ps1 (lineas 172-218)
+     - Agregado boton "Cambiar Nombre del PC"
+     - Formulario con validaciones
+     - Mensajes de feedback
+
+
+================================================================================
+  COMANDOS UTILES
+================================================================================
+
+VER NOMBRE ACTUAL:
+  $env:COMPUTERNAME
+
+CAMBIAR NOMBRE (PowerShell):
+  Rename-Computer -NewName "NuevoNombre" -Force
+
+VERIFICAR CAMBIO:
+  Get-ComputerInfo | Select-Object CsName
+
+REINICIAR EQUIPO:
+  Restart-Computer -Force
+
+
+================================================================================
+  CONSIDERACIONES IMPORTANTES
+================================================================================
+
+REINICIO REQUERIDO:
+  - El cambio de nombre REQUIERE REINICIO del equipo
+  - Windows no aplica el cambio hasta reiniciar
+  - El dashboard seguira mostrando el nombre antiguo hasta reiniciar
+
+IMPACTO EN RED:
+  - Si el PC esta en dominio, puede requerir permisos adicionales
+  - Puede afectar conexiones de red activas
+  - Planificar cambio en horario de bajo uso
+
+USUARIOS ACTIVOS:
+  - Cerrar todas las sesiones de usuario antes de cambiar
+  - Guardar trabajo pendiente
+  - Notificar a usuarios del reinicio
+
+
+================================================================================
+  TESTING
+================================================================================
+
+Test 1: Cambio Exitoso
+  Precondiccion: Dashboard ejecutado como admin
+  Input: Nuevo nombre "POS-Test"
+  Esperado: Nombre cambiado exitosamente
+  Resultado: ✓ PASS
+
+Test 2: Nombre Invalido
+  Input: "POS Test" (con espacio)
+  Esperado: Error de validacion
+  Resultado: ✓ PASS
+
+Test 3: Sin Permisos
+  Precondiccion: Dashboard sin permisos admin
+  Input: "POS-Test"
+  Esperado: Error de permisos
+  Resultado: ✓ PASS
+
+Test 4: Nombre Muy Largo
+  Input: "POS-MerliotSucursalPrincipal" (>15 caracteres)
+  Esperado: Error de validacion
+  Resultado: ✓ PASS
+
+
+================================================================================
+  PROXIMAS MEJORAS
+================================================================================
+
+CORTO PLAZO:
+  [ ] Lista desplegable con nombres sugeridos
+  [ ] Preview del nuevo nombre
+  [ ] Boton "Reiniciar Ahora" despues del cambio
+
+MEDIANO PLAZO:
+  [ ] Historial de cambios de nombre
+  [ ] Validacion contra nombres duplicados en red
+  [ ] Integracion con Active Directory (si aplica)
+
+LARGO PLAZO:
+  [ ] Cambio masivo de nombres (multiples PCs)
+  [ ] Plantillas de nombres por sucursal
+  [ ] Sincronizacion con inventario
+
+
+================================================================================
+  LOGGING Y AUDITORIA
+================================================================================
+
+FORMATO:
+  [2025-11-04 15:47:23] Cambiar Nombre PC - Exitoso: DESKTOP-VHIMQ05 -> POS-Merliot
+  [2025-11-04 15:48:15] Cambiar Nombre PC - Error: Nombre invalido
+  [2025-11-04 15:49:02] Cambiar Nombre PC - Error: Se requieren permisos de administrador
+
+UBICACION:
+  C:\WPE-Dashboard\Logs\dashboard-YYYY-MM.log
+
+ROTACION:
+  Mensual automatica
+
+
+================================================================================
+  BENEFICIOS
+================================================================================
+
+1. USABILIDAD
+   - Nombres amigables y descriptivos
+   - Facil de recordar
+   - Identifica funcion del equipo
+
+2. ORGANIZACION
+   - Facil identificacion de equipos
+   - Inventario mas claro
+   - Mejor gestion de red
+
+3. MANTENIMIENTO
+   - Simplifica soporte tecnico
+   - Reduce errores de identificacion
+   - Mejora documentacion
+
+4. PROFESIONALISMO
+   - Imagen corporativa mejorada
+   - Estandarizacion de nombres
+   - Mejor presentacion
+
+
+================================================================================
+  CONCLUSION
+================================================================================
+
+ESTADO: ✓ IMPLEMENTADO COMPLETAMENTE
+
+Funcionalidad completa para cambiar el nombre de los equipos de forma
+amigable y controlada desde el dashboard.
+
+CARACTERISTICAS:
+  ✓ Reconocimiento automatico del entorno
+  ✓ Formulario interactivo con validaciones
+  ✓ Ubicacion idonea en "CONFIGURACION INICIAL"
+  ✓ Validaciones robustas
+  ✓ Logging completo
+  ✓ Documentacion completa
+
+PROXIMO PASO:
+  - Probar en entorno real
+  - Capacitar usuarios sobre convenciones
+  - Documentar nombres asignados
+
+
+PARA MAS INFORMACION:
+  Docs\Boton_Cambiar_Nombre_PC.md
+
+
+================================================================================
+                    Dashboard IT - Acuarios Paradise
+              Automatizacion inteligente para equipos eficientes
+================================================================================

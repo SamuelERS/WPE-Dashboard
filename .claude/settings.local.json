@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell.exe -Command:*)",
+      "Bash(dir:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"Get-UDDashboard\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& {Import-Module UniversalDashboard.Community; Write-Host ''Modulo cargado correctamente'' -ForegroundColor Green}\")",
+      "Bash(if not exist Logs mkdir Logs)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

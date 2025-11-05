@@ -1,0 +1,43 @@
+# ============================================
+# GITIGNORE - Dashboard IT Acuarios Paradise
+# ============================================
+
+# Carpetas temporales
+Temp/
+*.tmp
+*.temp
+
+# Logs (mantener estructura pero ignorar contenido)
+Logs/*.log
+!Logs/.gitkeep
+
+# Backups
+Backup/
+*.bak
+*.backup
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.suo
+*.user
+.vs/
+
+# Archivos de PowerShell
+*.ps1~
+
+# Archivos de Windows
+$RECYCLE.BIN/
+*.lnk
+
+# Archivos sensibles (si los hay)
+*.key
+*.pem
+*.pfx
+config.local.ps1
+secrets.ps1
