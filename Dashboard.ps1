@@ -325,22 +325,59 @@ Write-DashboardLog -Accion "Reiniciar PC" -Resultado "Cancelado por usuario"
 Hide-UDModal
 } -Style @{'background-color'='#6c757d';'color'='white';'padding'='12px 24px'}
 }
-} -Header {New-UDHeading -Text "Confirmar Reinicio del Sistema" -Size 5} -FullWidth -MaxWidth 'md' -Persistent
+} -Header {New-UDHeading -Text "Confirmar Reinicio del Sistema" -Size 5} -MaxWidth 'md' -Persistent
 } -Style @{'background-color'='#dc3545';'color'='white'}
 # BOTON 3: Crear Usuario del Sistema
 New-UDButton -Text "Crear Usuario del Sistema" -OnClick {
 Show-UDModal -Content {
 New-UDInput -Title "Crear Usuario del Sistema" -Content {
 New-UDInputField -Name "nombreUsuario" -Placeholder "Ejemplo: POS-Merliot" -Type textbox
-New-UDInputField -Name "password" -Placeholder "Password (defecto: 841357)" -Type textbox
+New-UDInputField -Name "password" -Placeholder "Ingresa password (obligatorio)" -Type password
 New-UDInputField -Name "tipoUsuario" -Placeholder "Selecciona tipo" -Type select -Values @("POS", "Admin", "Diseno", "Cliente", "Mantenimiento")
 } -Endpoint {
 param($nombreUsuario, $password, $tipoUsuario)
+
+# LOGGING DE DEBUGGING: Registrar valores recibidos del formulario
+Write-DashboardLog -Accion "Crear Usuario - DEBUG" -Resultado "Valores recibidos - nombreUsuario: [$nombreUsuario] - password: [***] - tipo: [$tipoUsuario]"
+
+# LISTA NEGRA: Nombres prohibidos que NO se pueden usar
+$nombresProhibidos = @("null", "NULL", "undefined", "UNDEFINED", "", " ", "Administrator", "Administrador", "Guest", "Invitado", "PARADISE-SYSTEMLABS")
+
+# VALIDACION ROBUSTA 1: Verificar que nombreUsuario NO sea null, vacio o whitespace
 if([string]::IsNullOrWhiteSpace($nombreUsuario)){
-Show-UDToast -Message "Debes ingresar un nombre de usuario" -Duration 3000 -BackgroundColor "#f44336"
+Show-UDToast -Message "ERROR: Debes ingresar un nombre de usuario valido. Ejemplo: POS-Merliot, Admin-Oficina" -Duration 5000 -BackgroundColor "#f44336"
+Write-DashboardLog -Accion "Crear Usuario" -Resultado "Error: nombreUsuario vacio o null"
 return
 }
-if([string]::IsNullOrWhiteSpace($password)){$password = "841357"}
+
+# VALIDACION ROBUSTA 2: Verificar que el nombre NO este en la lista negra
+if($nombresProhibidos -contains $nombreUsuario){
+Show-UDToast -Message "ERROR: El nombre '$nombreUsuario' no esta permitido. Usa un nombre valido como: POS-Merliot, Admin-Oficina, Cliente-Sala1" -Duration 8000 -BackgroundColor "#f44336"
+Write-DashboardLog -Accion "Crear Usuario" -Resultado "Error: nombreUsuario '$nombreUsuario' en lista negra"
+return
+}
+
+# VALIDACION ROBUSTA 3: Verificar que no contenga caracteres peligrosos
+if($nombreUsuario -match '[<>:"/\\|?*]'){
+Show-UDToast -Message "ERROR: El nombre de usuario contiene caracteres no permitidos. Usa solo letras, numeros y guiones." -Duration 5000 -BackgroundColor "#f44336"
+Write-DashboardLog -Accion "Crear Usuario" -Resultado "Error: nombreUsuario contiene caracteres invalidos"
+return
+}
+
+# VALIDACION PASSWORD OBLIGATORIO: No se permite crear usuarios sin password
+if([string]::IsNullOrWhiteSpace($password)){
+Show-UDToast -Message "ERROR: Debes ingresar un password para el nuevo usuario. Campo obligatorio." -Duration 5000 -BackgroundColor "#f44336"
+Write-DashboardLog -Accion "Crear Usuario" -Resultado "Error: Password vacio - Campo obligatorio"
+return
+}
+
+# VALIDACION LONGITUD PASSWORD: Minimo 6 caracteres para seguridad
+if($password.Length -lt 6){
+Show-UDToast -Message "ERROR: El password debe tener al menos 6 caracteres por seguridad." -Duration 5000 -BackgroundColor "#f44336"
+Write-DashboardLog -Accion "Crear Usuario" -Resultado "Error: Password muy corto (menos de 6 caracteres)"
+return
+}
+
 if([string]::IsNullOrWhiteSpace($tipoUsuario)){$tipoUsuario = "POS"}
 try{
 # Verificar permisos de administrador
@@ -362,6 +399,13 @@ Show-UDToast -Message "Creando usuario $nombreUsuario usando metodo compatible..
 
 # SOLUCION: Usar comandos NET USER (legacy) en lugar de New-LocalUser
 # Estos comandos son MAS compatibles con la pantalla de login de Windows
+
+# VALIDACION FINAL DE SEGURIDAD: Ultimo chequeo antes de crear usuario
+if([string]::IsNullOrWhiteSpace($nombreUsuario) -or $nombreUsuario -eq "null" -or $nombreUsuario -eq "undefined"){
+throw "VALIDACION FINAL FALLIDA: nombreUsuario es invalido o null. Operacion cancelada por seguridad."
+}
+
+Write-DashboardLog -Accion "Crear Usuario" -Resultado "Validacion OK - Procediendo a crear: $nombreUsuario"
 
 # PASO 1: Crear usuario con NET USER
 # CRITICO: fullname debe ser el NOMBRE DEL USUARIO para que aparezca correctamente en login
@@ -774,7 +818,7 @@ Write-DashboardLog -Accion "Reiniciar PC" -Resultado "Cancelado por usuario"
 Hide-UDModal
 } -Style @{'background-color'='#6c757d';'color'='white';'padding'='12px 24px'}
 }
-} -Header {New-UDHeading -Text "Confirmar Reinicio del Sistema" -Size 5} -FullWidth -MaxWidth 'md' -Persistent
+} -Header {New-UDHeading -Text "Confirmar Reinicio del Sistema" -Size 5} -MaxWidth 'md' -Persistent
 } -Style @{'background-color'='#dc3545';'color'='white';'font-weight'='bold'}
 New-UDButton -Text "Reiniciar Dashboard" -OnClick {Show-UDToast -Message "Reiniciando dashboard..." -Duration 3000 -BackgroundColor "#ff9800";Write-DashboardLog -Accion "Reiniciar Dashboard" -Resultado "Solicitado";try{Get-UDDashboard | Stop-UDDashboard;Start-Sleep -Seconds 2;Start-Process powershell -ArgumentList "-ExecutionPolicy Bypass -NoExit -File `"$ScriptRoot\Dashboard.ps1`"" -Verb RunAs;exit}catch{Show-UDToast -Message "Error al reiniciar: $_" -Duration 5000 -BackgroundColor "#f44336"}} -Style @{'background-color'='#ff9800';'color'='white'}
 }
