@@ -152,7 +152,7 @@ try {
 }
 Write-Host "============================================`n" -ForegroundColor Cyan
 $Dashboard = New-UDDashboard -Title "Paradise-SystemLabs" -Content {
-New-UDHeading -Text "ParadiseScripts - IT Automation" -Size 2
+New-UDHeading -Text "Paradise-SystemLabs" -Size 2
 New-UDElement -Tag 'hr'
 
 # Tarjeta informativa sobre PC actual
@@ -168,8 +168,8 @@ New-UDCard -Title "INFORMACION DEL SISTEMA" -Content {
 New-UDElement -Tag 'hr'
 New-UDLayout -Columns 1 -Content {
 New-UDCard -Title "CONFIGURACION INICIAL" -Content {
-# FILA 1: Cambiar Nombre PC -> Reiniciar -> Crear Usuario
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'margin-bottom'='15px';'flex-wrap'='wrap'}} -Content {
+# FILA 1: Cambiar Nombre PC
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'margin-bottom'='10px';'flex-wrap'='wrap'}} -Content {
 New-UDButton -Text "Cambiar Nombre del PC" -OnClick {
 Show-UDModal -Content {
 New-UDInput -Title "Cambiar Nombre del PC" -Content {
@@ -225,12 +225,18 @@ Show-UDToast -Message "Error al cambiar nombre del PC: $_" -Duration 8000 -Backg
 }
 }
 }
+}
+# FILA 2: Reiniciar PC (Boton rojo de advertencia)
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'margin-bottom'='10px';'flex-wrap'='wrap'}} -Content {
 New-UDButton -Text "Reiniciar PC" -OnClick {
 Show-UDToast -Message "Reiniciando el equipo en 10 segundos..." -Duration 10000 -BackgroundColor "#ff9800"
 Write-DashboardLog -Accion "Reiniciar PC" -Resultado "Solicitado"
 Start-Sleep -Seconds 3
 Restart-Computer -Force
+} -Style @{'background-color'='#dc3545';'color'='white';'border'='none';'padding'='10px 20px';'font-weight'='bold';'box-shadow'='0 2px 4px rgba(0,0,0,0.2)'}
 }
+# FILA 3: Crear Usuario del Sistema
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'margin-bottom'='10px';'flex-wrap'='wrap'}} -Content {
 New-UDButton -Text "Crear Usuario del Sistema" -OnClick {
 Show-UDModal -Content {
 New-UDInput -Title "Crear Usuario del Sistema" -Content {
@@ -307,6 +313,9 @@ Show-UDToast -Message "Error al crear usuario: $_" -Duration 8000 -BackgroundCol
 }
 }
 }
+}
+# FILA 4: Ver y Gestionar Usuarios
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'margin-bottom'='10px';'flex-wrap'='wrap'}} -Content {
 New-UDButton -Text "Ver Usuarios Actuales" -OnClick {
 try {
 # Obtener todos los usuarios locales del sistema con informacion extendida
@@ -578,7 +587,7 @@ Show-UDToast -Message "Error en diagnostico: $_" -Duration 5000 -BackgroundColor
 }
 }
 }
-# FILA 2: Otros botones de configuracion
+# FILA 5: Otros botones de configuracion
 New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'flex-wrap'='wrap'}} -Content {
 New-UDButton -Text "Configurar Biometria" -OnClick {Show-UDToast -Message "Configurando biometria..." -Duration 2000;Write-DashboardLog -Accion "Config Biometria" -Resultado "Iniciado"}
 New-UDButton -Text "Instalar Software Base" -OnClick {Show-UDToast -Message "Instalando software..." -Duration 2000;Write-DashboardLog -Accion "Software Base" -Resultado "Iniciado"}
