@@ -1,5 +1,5 @@
 ================================================================================
-                    DASHBOARD IT - ACUARIOS PARADISE
+                    DASHBOARD IT - PARADISE-SYSTEMLABS
                          BIENVENIDO AL PROYECTO
 ================================================================================
 
@@ -207,7 +207,7 @@
   Version:              1.1
   Fecha:                Noviembre 2025
   Estado:               PRODUCCION
-  Proyecto:             Dashboard IT Acuarios Paradise
+  Proyecto:             Dashboard IT Paradise-SystemLabs
   Tecnologia:           PowerShell + Universal Dashboard
 
 
@@ -224,6 +224,6 @@
 
 
 ================================================================================
-                    Dashboard IT - Acuarios Paradise
+                    Dashboard IT - Paradise-SystemLabs
               Automatizacion inteligente para equipos eficientes
 ================================================================================

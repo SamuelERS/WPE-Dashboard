@@ -2,7 +2,7 @@
 
 ## Descripción General
 
-Dashboard web de automatización IT para Acuarios Paradise. Permite gestionar usuarios, configuraciones y mantenimiento de equipos Windows de forma centralizada mediante una interfaz web.
+Dashboard web de automatización IT para Paradise-SystemLabs. Permite gestionar usuarios, configuraciones y mantenimiento de equipos Windows de forma centralizada mediante una interfaz web.
 
 **Tecnologías:**
 - PowerShell 5.1+

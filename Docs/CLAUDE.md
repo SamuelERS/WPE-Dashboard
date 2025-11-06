@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-WPE-Dashboard is a PowerShell-based IT automation web dashboard for Acuarios Paradise. It provides a centralized web interface for executing Windows administration scripts across multiple business functions. Built with UniversalDashboard.Community v2.9.0, it runs as a local web server on port 10000.
+WPE-Dashboard is a PowerShell-based IT automation web dashboard for Paradise-SystemLabs. It provides a centralized web interface for executing Windows administration scripts across multiple business functions. Built with UniversalDashboard.Community v2.9.0, it runs as a local web server on port 10000.
 
 **Technology Stack:**
 - Language: PowerShell 5.1+

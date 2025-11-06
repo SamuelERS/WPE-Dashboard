@@ -316,5 +316,5 @@ La reorganización del proyecto ha sido **COMPLETADA EXITOSAMENTE**.
 
 ---
 
-**Dashboard IT - Acuarios Paradise** 🐠  
+**Dashboard IT - Paradise-SystemLabs** 🐠  
 *Automatización inteligente para equipos eficientes*

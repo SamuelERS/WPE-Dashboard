@@ -296,7 +296,7 @@ C:\WPE-Dashboard\
 
 ---
 
-**Dashboard IT - Acuarios Paradise**  
+**Dashboard IT - Paradise-SystemLabs**  
 *Documentación completa y actualizada* 📚
 
 ---

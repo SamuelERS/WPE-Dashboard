@@ -1,4 +1,4 @@
-# 📊 PROGRESO DEL PROYECTO - Dashboard IT Acuarios Paradise
+# 📊 PROGRESO DEL PROYECTO - Dashboard IT Paradise-SystemLabs
 
 **Última actualización:** Noviembre 2025  
 **Versión actual:** 1.1
@@ -158,7 +158,7 @@
 
 **Tareas:**
 - [ ] Temas personalizables (claro/oscuro)
-- [ ] Logo de Acuarios Paradise
+- [ ] Logo de Paradise-SystemLabs
 - [ ] Colores corporativos
 - [ ] Iconos personalizados
 - [ ] Animaciones

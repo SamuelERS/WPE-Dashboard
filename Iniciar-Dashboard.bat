@@ -1,5 +1,5 @@
 @echo off
-title Acuarios Paradise - Dashboard IT
+title Paradise-SystemLabs - Dashboard IT
 
 :: Verificar permisos de administrador
 net session >nul 2>&1
@@ -12,17 +12,22 @@ if %errorLevel% neq 0 (
 :: Ya tenemos permisos admin, continuar
 color 0B
 cls
+
+:: Detectar ubicacion del script automaticamente (PORTABLE)
+set "SCRIPT_DIR=%~dp0"
+set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
+
 echo.
 echo ============================================
-echo   DASHBOARD ACUARIOS PARADISE - ADMIN MODE
+echo   DASHBOARD PARADISE-SYSTEMLABS - ADMIN MODE
 echo ============================================
 echo.
 echo [OK] Ejecutando con permisos administrativos
-echo [INFO] Cambiando a directorio: C:\WPE-Dashboard
+echo [INFO] Ubicacion detectada: %SCRIPT_DIR%
 echo.
 
 :: Cambiar a directorio del dashboard
-cd /d "C:\WPE-Dashboard"
+cd /d "%SCRIPT_DIR%"
 
 :: Verificar que estamos en el directorio correcto
 if not exist "Dashboard.ps1" (
@@ -40,4 +45,4 @@ echo ============================================
 echo.
 
 :: Ejecutar dashboard
-powershell.exe -ExecutionPolicy Bypass -NoExit -NoProfile -Command "& {cd 'C:\WPE-Dashboard'; Import-Module UniversalDashboard.Community; . '.\Dashboard.ps1'}"
+powershell.exe -ExecutionPolicy Bypass -NoExit -NoProfile -Command "& {cd '%SCRIPT_DIR%'; Import-Module UniversalDashboard.Community; . '.\Dashboard.ps1'}"

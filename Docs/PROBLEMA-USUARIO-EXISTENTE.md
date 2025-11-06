@@ -297,5 +297,5 @@ El problema ha sido **RESUELTO COMPLETAMENTE**.
 
 ---
 
-**Dashboard IT - Acuarios Paradise** 🐠  
+**Dashboard IT - Paradise-SystemLabs** 🐠  
 *Automatización inteligente para equipos eficientes*

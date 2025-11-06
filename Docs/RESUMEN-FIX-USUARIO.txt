@@ -1,6 +1,6 @@
 ================================================================================
                     PROBLEMA RESUELTO: USUARIO YA EXISTE
-                        Dashboard IT - Acuarios Paradise
+                        Dashboard IT - Paradise-SystemLabs
 ================================================================================
 
 FECHA: 4 de Noviembre, 2025
@@ -182,6 +182,6 @@ PARA MAS INFORMACION:
 
 
 ================================================================================
-                    Dashboard IT - Acuarios Paradise
+                    Dashboard IT - Paradise-SystemLabs
               Automatizacion inteligente para equipos eficientes
 ================================================================================

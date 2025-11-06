@@ -398,4 +398,4 @@ Si tienes dudas sobre dónde colocar un archivo:
 **Estas reglas son OBLIGATORIAS para mantener el proyecto organizado y profesional.**
 
 **Versión:** 1.1  
-**Dashboard IT - Acuarios Paradise** 🐠
+**Dashboard IT - Paradise-SystemLabs** 🐠

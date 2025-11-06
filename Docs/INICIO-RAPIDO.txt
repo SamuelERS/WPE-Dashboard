@@ -1,5 +1,5 @@
 ================================================================================
-  DASHBOARD IT - ACUARIOS PARADISE
+  DASHBOARD IT - PARADISE-SYSTEMLABS
   Guía de Inicio Rápido
 ================================================================================
 
@@ -85,5 +85,5 @@ Para dudas o problemas:
 3. Consultar scripts de ejemplo en Scripts\
 
 ================================================================================
-Dashboard IT v1.1 | Acuarios Paradise | Noviembre 2025
+Dashboard IT v1.1 | Paradise-SystemLabs | Noviembre 2025
 ================================================================================

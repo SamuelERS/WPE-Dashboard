@@ -1,4 +1,4 @@
-# 📋 CHANGELOG - Dashboard IT Acuarios Paradise
+# 📋 CHANGELOG - Dashboard IT Paradise-SystemLabs
 
 Registro de todos los cambios, mejoras y correcciones del proyecto.
 
@@ -128,7 +128,7 @@ Registro de todos los cambios, mejoras y correcciones del proyecto.
 - Visor de logs integrado en dashboard
 
 #### Interfaz de Usuario
-- Dashboard web con título "Acuarios Paradise IT"
+- Dashboard web con título "Paradise-SystemLabs"
 - 6 categorías organizadas:
   1. Configuración Inicial
   2. Mantenimiento General
@@ -327,5 +327,5 @@ Para reportar bugs o sugerir mejoras:
 
 ---
 
-*Dashboard IT - Acuarios Paradise*  
+*Dashboard IT - Paradise-SystemLabs*  
 *Automatización inteligente para equipos eficientes* 🐠

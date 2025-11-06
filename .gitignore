@@ -1,5 +1,5 @@
 # ============================================
-# GITIGNORE - Dashboard IT Acuarios Paradise
+# GITIGNORE - Dashboard IT Paradise-SystemLabs
 # ============================================
 
 # Carpetas temporales
@@ -27,6 +27,9 @@ desktop.ini
 *.suo
 *.user
 .vs/
+
+# Configuracion local de Claude Code
+.claude/settings.local.json
 
 # Archivos de PowerShell
 *.ps1~

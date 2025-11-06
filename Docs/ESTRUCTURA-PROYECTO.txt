@@ -1,6 +1,6 @@
 ================================================================================
                     ESTRUCTURA DEL PROYECTO
-                  Dashboard IT - Acuarios Paradise
+                  Dashboard IT - Paradise-SystemLabs
 ================================================================================
 
 C:\WPE-Dashboard\
@@ -189,7 +189,7 @@ VERIFICACION:
 Version:              1.2
 Fecha:                Noviembre 2025
 Estado:               PRODUCCION
-Proyecto:             Dashboard IT Acuarios Paradise
+Proyecto:             Dashboard IT Paradise-SystemLabs
 
 
 Para mas informacion, consulta:
@@ -199,6 +199,6 @@ Para mas informacion, consulta:
 
 
 ================================================================================
-                    Dashboard IT - Acuarios Paradise
+                    Dashboard IT - Paradise-SystemLabs
               Automatizacion inteligente para equipos eficientes
 ================================================================================
