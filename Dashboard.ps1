@@ -6,10 +6,71 @@
 $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 Write-Host "Ubicacion del dashboard: $ScriptRoot" -ForegroundColor Cyan
 
-# Importar modulo si no esta cargado
+# Verificar si el módulo está disponible (instalado)
+$moduloDisponible = Get-Module -ListAvailable -Name UniversalDashboard.Community
+
+if (-not $moduloDisponible) {
+    Write-Host "`n[ADVERTENCIA] UniversalDashboard.Community no esta instalado" -ForegroundColor Yellow
+    Write-Host "[INFO] Iniciando instalacion automatica...`n" -ForegroundColor Cyan
+
+    # Verificar permisos de administrador
+    $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+    if ($isAdmin) {
+        try {
+            # Intentar instalación automática
+            Write-Host "[INFO] Instalando UniversalDashboard.Community..." -ForegroundColor Cyan
+            Write-Host "[INFO] Esto puede tardar varios minutos. Por favor espera...`n" -ForegroundColor Yellow
+
+            # Configurar PSGallery como confiable temporalmente
+            $repoPolicy = Get-PSRepository -Name PSGallery | Select-Object -ExpandProperty InstallationPolicy
+            if ($repoPolicy -ne "Trusted") {
+                Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+            }
+
+            # Instalar módulo
+            Install-Module -Name UniversalDashboard.Community -RequiredVersion 2.9.0 -Scope AllUsers -Force -AllowClobber -ErrorAction Stop
+
+            # Restaurar política original
+            if ($repoPolicy -ne "Trusted") {
+                Set-PSRepository -Name PSGallery -InstallationPolicy $repoPolicy
+            }
+
+            Write-Host "`n[OK] Modulo instalado exitosamente" -ForegroundColor Green
+            Write-Host "[INFO] Continuando con el inicio del dashboard...`n" -ForegroundColor Cyan
+
+        } catch {
+            Write-Host "`n[ERROR] No se pudo instalar automaticamente: $_" -ForegroundColor Red
+            Write-Host "`nPor favor ejecuta manualmente:" -ForegroundColor Yellow
+            Write-Host ".\Instalar-Dependencias.bat`n" -ForegroundColor White
+            Write-Host "Presiona cualquier tecla para salir..." -ForegroundColor Gray
+            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            exit 1
+        }
+    } else {
+        Write-Host "`n[ERROR] Se requieren permisos de administrador para instalar el modulo" -ForegroundColor Red
+        Write-Host "`nOpciones:" -ForegroundColor Yellow
+        Write-Host "1. Cierra esta ventana" -ForegroundColor Yellow
+        Write-Host "2. Ejecuta: Iniciar-Dashboard.bat (con clic derecho > Ejecutar como administrador)" -ForegroundColor Yellow
+        Write-Host "   O ejecuta: Instalar-Dependencias.bat`n" -ForegroundColor Yellow
+        Write-Host "Presiona cualquier tecla para salir..." -ForegroundColor Gray
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        exit 1
+    }
+}
+
+# Cargar el módulo
 if (-not (Get-Module -Name UniversalDashboard.Community)) {
     Write-Host "Cargando modulo UniversalDashboard..." -ForegroundColor Cyan
-    Import-Module UniversalDashboard.Community -ErrorAction Stop
+    try {
+        Import-Module UniversalDashboard.Community -ErrorAction Stop
+    } catch {
+        Write-Host "`n[ERROR] No se pudo cargar el modulo: $_" -ForegroundColor Red
+        Write-Host "Intenta ejecutar: .\Instalar-Dependencias.bat`n" -ForegroundColor Yellow
+        Write-Host "Presiona cualquier tecla para salir..." -ForegroundColor Gray
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        exit 1
+    }
 }
 
 # Crear carpeta de Logs si no existe (relativa a la ubicacion del script)
