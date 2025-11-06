@@ -173,8 +173,8 @@ New-UDCard -Title "INFORMACION DEL SISTEMA" -Content {
 New-UDElement -Tag 'hr' -Attributes @{style=@{'margin'='24px 0'}}
 New-UDLayout -Columns 1 -Content {
 New-UDCard -Title "CONFIGURACION INICIAL" -Content {
-# FILA 1: Cambiar Nombre PC
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'margin-bottom'='10px';'flex-wrap'='wrap'}} -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'='12px';'padding'='16px'}} -Content {
+# BOTON 1: Cambiar Nombre PC
 New-UDButton -Text "Cambiar Nombre del PC" -OnClick {
 Show-UDModal -Content {
 New-UDInput -Title "Cambiar Nombre del PC" -Content {
@@ -230,18 +230,14 @@ Show-UDToast -Message "Error al cambiar nombre del PC: $_" -Duration 8000 -Backg
 }
 }
 }
-}
-# FILA 2: Reiniciar PC (Boton rojo de advertencia)
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'margin-bottom'='10px';'flex-wrap'='wrap'}} -Content {
+# BOTON 2: Reiniciar PC (Boton rojo de advertencia)
 New-UDButton -Text "REINICIAR PC" -OnClick {
 Show-UDToast -Message "Reiniciando el equipo en 10 segundos..." -Duration 10000 -BackgroundColor "#ff9800"
 Write-DashboardLog -Accion "Reiniciar PC" -Resultado "Solicitado"
 Start-Sleep -Seconds 3
 Restart-Computer -Force
 } -Style @{'background-color'='#dc3545';'color'='white'}
-}
-# FILA 3: Crear Usuario del Sistema
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'margin-bottom'='10px';'flex-wrap'='wrap'}} -Content {
+# BOTON 3: Crear Usuario del Sistema
 New-UDButton -Text "Crear Usuario del Sistema" -OnClick {
 Show-UDModal -Content {
 New-UDInput -Title "Crear Usuario del Sistema" -Content {
@@ -318,9 +314,7 @@ Show-UDToast -Message "Error al crear usuario: $_" -Duration 8000 -BackgroundCol
 }
 }
 }
-}
-# FILA 4: Ver y Gestionar Usuarios
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'margin-bottom'='10px';'flex-wrap'='wrap'}} -Content {
+# BOTON 4: Ver Usuarios Actuales
 New-UDButton -Text "Ver Usuarios Actuales" -OnClick {
 try {
 # Obtener todos los usuarios locales del sistema con informacion extendida
@@ -383,6 +377,7 @@ Write-DashboardLog -Accion "Ver Usuarios" -Resultado "Error: $_"
 Show-UDToast -Message "Error al obtener usuarios: $_" -Duration 5000 -BackgroundColor "#f44336"
 }
 }
+# BOTON 5: Reparar Usuarios Existentes
 New-UDButton -Text "Reparar Usuarios Existentes" -OnClick {
 try {
 Show-UDToast -Message "Reparando configuracion de usuarios... Esto puede tomar varios segundos." -Duration 5000
@@ -443,6 +438,8 @@ Show-UDToast -Message "Reparacion completada: $reparados usuarios configurados, 
 Write-DashboardLog -Accion "Reparar Usuarios" -Resultado "Error: $_"
 Show-UDToast -Message "Error al reparar usuarios: $_" -Duration 8000 -BackgroundColor "#f44336"
 }
+}
+# BOTON 6: Eliminar Usuarios (MOVIDO del closure de Reparar Usuarios)
 New-UDButton -Text "Eliminar Usuarios" -OnClick {
 Show-UDModal -Content {
 New-UDInput -Title "Eliminar Usuario del Sistema" -Content {
@@ -502,7 +499,7 @@ Show-UDToast -Message "Error al eliminar usuario: $_" -Duration 8000 -Background
 }
 }
 }
-}
+# BOTON 7: Diagnostico Pantalla Login
 New-UDButton -Text "Diagnostico Pantalla Login" -OnClick {
 try {
 Show-UDToast -Message "Analizando configuracion de pantalla de login..." -Duration 3000
@@ -591,14 +588,15 @@ Write-DashboardLog -Accion "Diagnostico Login" -Resultado "Completado"
 Show-UDToast -Message "Error en diagnostico: $_" -Duration 5000 -BackgroundColor "#f44336"
 }
 }
-}
-# FILA 5: Otros botones de configuracion
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'flex-wrap'='wrap';'margin-top'='24px'}} -Content {
+# BOTON 8: Configurar Biometria
 New-UDButton -Text "Configurar Biometria" -OnClick {Show-UDToast -Message "Configurando biometria..." -Duration 2000;Write-DashboardLog -Accion "Config Biometria" -Resultado "Iniciado"}
+# BOTON 9: Instalar Software Base
 New-UDButton -Text "Instalar Software Base" -OnClick {Show-UDToast -Message "Instalando software..." -Duration 2000;Write-DashboardLog -Accion "Software Base" -Resultado "Iniciado"}
+# BOTON 10: Configurar Email Corporativo
 New-UDButton -Text "Configurar Email Corporativo" -OnClick {Show-UDToast -Message "Configurando email..." -Duration 2000;Write-DashboardLog -Accion "Email Corp" -Resultado "Iniciado"}
 }
-}}
+}
+}
 New-UDElement -Tag 'div' -Attributes @{style=@{'margin-top'='24px'}} -Content {
 New-UDCard -Title "MANTENIMIENTO GENERAL" -Content {
 New-UDElement -Tag 'div' -Attributes @{style=@{'padding'='16px'}} -Content {
