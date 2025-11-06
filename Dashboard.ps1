@@ -136,6 +136,10 @@ function Write-DashboardLog {
     }
 }
 
+# Variables de Diseno
+$Colors = @{Primary = "#2196F3"; Success = "#4caf50"; Warning = "#ff9800"; Danger = "#dc3545"}
+$Spacing = @{M = "12px"; L = "16px"}
+
 Write-Host "`n============================================" -ForegroundColor Cyan
 Write-Host "  DASHBOARD INICIANDO" -ForegroundColor Green
 Write-Host "============================================" -ForegroundColor Cyan
@@ -152,6 +156,7 @@ try {
 }
 Write-Host "============================================`n" -ForegroundColor Cyan
 $Dashboard = New-UDDashboard -Title "Paradise-SystemLabs" -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'max-width'='1400px';'margin'='0 auto';'padding'='20px'}} -Content {
 New-UDHeading -Text "Paradise-SystemLabs" -Size 2
 New-UDElement -Tag 'hr'
 
@@ -165,7 +170,7 @@ New-UDCard -Title "INFORMACION DEL SISTEMA" -Content {
     }
 }
 
-New-UDElement -Tag 'hr'
+New-UDElement -Tag 'hr' -Attributes @{style=@{'margin'='24px 0'}}
 New-UDLayout -Columns 1 -Content {
 New-UDCard -Title "CONFIGURACION INICIAL" -Content {
 # FILA 1: Cambiar Nombre PC
@@ -588,48 +593,60 @@ Show-UDToast -Message "Error en diagnostico: $_" -Duration 5000 -BackgroundColor
 }
 }
 # FILA 5: Otros botones de configuracion
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'flex-wrap'='wrap'}} -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'flex-wrap'='wrap';'margin-top'='24px'}} -Content {
 New-UDButton -Text "Configurar Biometria" -OnClick {Show-UDToast -Message "Configurando biometria..." -Duration 2000;Write-DashboardLog -Accion "Config Biometria" -Resultado "Iniciado"}
 New-UDButton -Text "Instalar Software Base" -OnClick {Show-UDToast -Message "Instalando software..." -Duration 2000;Write-DashboardLog -Accion "Software Base" -Resultado "Iniciado"}
 New-UDButton -Text "Configurar Email Corporativo" -OnClick {Show-UDToast -Message "Configurando email..." -Duration 2000;Write-DashboardLog -Accion "Email Corp" -Resultado "Iniciado"}
 }
 }}
-New-UDLayout -Columns 1 -Content {New-UDCard -Title "MANTENIMIENTO GENERAL" -Content {
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'flex-wrap'='wrap'}} -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'margin-top'='24px'}} -Content {
+New-UDCard -Title "MANTENIMIENTO GENERAL" -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'padding'='16px'}} -Content {
+New-UDLayout -Columns 2 -Content {
 New-UDButton -Text "Windows Update" -OnClick {Show-UDToast -Message "Verificando actualizaciones..." -Duration 2000;Write-DashboardLog -Accion "Windows Update" -Resultado "Iniciado"}
 New-UDButton -Text "Limpieza de Disco" -OnClick {Show-UDToast -Message "Limpiando disco..." -Duration 2000;Write-DashboardLog -Accion "Limpieza Disco" -Resultado "Iniciado"}
-New-UDButton -Text "Verificar Sistema" -OnClick {Show-UDToast -Message "Verificando..." -Duration 2000;Write-DashboardLog -Accion "Verificar Sistema" -Resultado "Iniciado"}
-New-UDButton -Text "Optimizar Rendimiento" -OnClick {Show-UDToast -Message "Optimizando..." -Duration 2000;Write-DashboardLog -Accion "Optimizar" -Resultado "Iniciado"}
+New-UDButton -Text "Verificar Sistema" -Style @{'background-color'='#4caf50';'color'='white'} -OnClick {Show-UDToast -Message "Verificando..." -Duration 2000;Write-DashboardLog -Accion "Verificar Sistema" -Resultado "Iniciado"}
+New-UDButton -Text "Optimizar Rendimiento" -OnClick {Show-UDToast -Message "Optimizando..." -Duration 2000;Write-DashboardLog -Accion "Optimizar" -Resultado "Iniciado"} -Style @{'background-color'='#4caf50';'color'='white'}
 }
-}}
-New-UDLayout -Columns 1 -Content {New-UDCard -Title "PUNTO DE VENTA (POS)" -Content {
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'flex-wrap'='wrap'}} -Content {
+}
+}
+}
+New-UDElement -Tag 'div' -Attributes @{style=@{'margin-top'='24px'}} -Content {
+New-UDLayout -Columns 3 -Content {
+New-UDCard -Title "PUNTO DE VENTA" -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'='10px';'padding'='16px'}} -Content {
 New-UDButton -Text "Reset Terminal" -OnClick {Show-UDToast -Message "Reseteando..." -Duration 2000;Write-DashboardLog -Accion "Reset Terminal" -Resultado "Iniciado"}
 New-UDButton -Text "Sincronizar Inventario" -OnClick {Show-UDToast -Message "Sincronizando..." -Duration 2000;Write-DashboardLog -Accion "Sync Inventario" -Resultado "Iniciado"}
 New-UDButton -Text "Config Impresora Fiscal" -OnClick {Show-UDToast -Message "Configurando..." -Duration 2000;Write-DashboardLog -Accion "Impresora Fiscal" -Resultado "Iniciado"}
 }
-}}
-New-UDLayout -Columns 1 -Content {New-UDCard -Title "DISENO GRAFICO" -Content {
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'flex-wrap'='wrap'}} -Content {
+}
+New-UDCard -Title "DISENO GRAFICO" -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'='10px';'padding'='16px'}} -Content {
 New-UDButton -Text "Setup Adobe Suite" -OnClick {Show-UDToast -Message "Instalando Adobe..." -Duration 2000;Write-DashboardLog -Accion "Adobe" -Resultado "Iniciado"}
 New-UDButton -Text "Calibrar Monitor" -OnClick {Show-UDToast -Message "Calibrando..." -Duration 2000;Write-DashboardLog -Accion "Calibrar Monitor" -Resultado "Iniciado"}
 New-UDButton -Text "Drivers Impresora" -OnClick {Show-UDToast -Message "Instalando..." -Duration 2000;Write-DashboardLog -Accion "Drivers" -Resultado "Iniciado"}
 }
-}}
-New-UDLayout -Columns 1 -Content {New-UDCard -Title "ATENCION AL CLIENTE" -Content {
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'flex-wrap'='wrap'}} -Content {
+}
+New-UDCard -Title "ATENCION AL CLIENTE" -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'='10px';'padding'='16px'}} -Content {
 New-UDButton -Text "Setup CRM" -OnClick {Show-UDToast -Message "Configurando CRM..." -Duration 2000;Write-DashboardLog -Accion "CRM" -Resultado "Iniciado"}
 New-UDButton -Text "Config Estacion" -OnClick {Show-UDToast -Message "Configurando..." -Duration 2000;Write-DashboardLog -Accion "Estacion" -Resultado "Iniciado"}
 New-UDButton -Text "Config Softphone" -OnClick {Show-UDToast -Message "Configurando..." -Duration 2000;Write-DashboardLog -Accion "Softphone" -Resultado "Iniciado"}
 }
-}}
-New-UDLayout -Columns 1 -Content {New-UDCard -Title "HISTORIAL Y AUDITORIA" -Content {
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'flex-wrap'='wrap'}} -Content {
-New-UDButton -Text "Ver Logs" -OnClick {$LogFile=Join-Path $ScriptRoot "Logs\dashboard-$(Get-Date -Format 'yyyy-MM').log";if(Test-Path $LogFile){$Logs=Get-Content $LogFile -Tail 30|Out-String;Show-UDModal -Content {New-UDHeading -Text "Ultimas 30 ejecuciones" -Size 4;New-UDElement -Tag 'pre' -Attributes @{style=@{'background-color'='#f5f5f5';'padding'='15px';'border-radius'='5px';'font-family'='Consolas, monospace';'font-size'='12px';'overflow-x'='auto'}} -Content {$Logs}} -Header {New-UDHeading -Text "Logs" -Size 5}}else{Show-UDToast -Message "No hay logs" -Duration 3000}}
-New-UDButton -Text "Reiniciar Dashboard" -OnClick {Show-UDToast -Message "Reiniciando dashboard..." -Duration 3000 -BackgroundColor "#ff9800";Write-DashboardLog -Accion "Reiniciar Dashboard" -Resultado "Solicitado";try{Get-UDDashboard | Stop-UDDashboard;Start-Sleep -Seconds 2;$dashPath=Join-Path $ScriptRoot "Dashboard.ps1";Start-Process powershell -ArgumentList "-ExecutionPolicy Bypass -NoExit -Command `"cd '$ScriptRoot'; & '.\Dashboard.ps1'`"" -Verb RunAs;exit}catch{Show-UDToast -Message "Error al reiniciar: $_" -Duration 5000 -BackgroundColor "#f44336"}}
+}
+}
+}
+New-UDElement -Tag 'hr' -Attributes @{style=@{'margin'='24px 0'}}
+New-UDCard -Title "ACCIONES CRITICAS" -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'padding'='16px';'background-color'='#ffe6e6';'border'='2px solid #dc3545';'border-radius'='5px'}} -Content {
+New-UDElement -Tag 'p' -Content {"ADVERTENCIA: Estas acciones afectaran el sistema inmediatamente"}
+New-UDElement -Tag 'div' -Attributes @{style=@{'margin-top'='12px';'display'='flex';'gap'='12px';'flex-wrap'='wrap'}} -Content {
+New-UDButton -Text "REINICIAR PC" -OnClick {Show-UDToast -Message "Reiniciando el equipo en 10 segundos..." -Duration 10000 -BackgroundColor "#ff9800";Write-DashboardLog -Accion "Reiniciar PC" -Resultado "Solicitado";Start-Sleep -Seconds 3;Restart-Computer -Force} -Style @{'background-color'='#dc3545';'color'='white';'font-weight'='bold'}
+New-UDButton -Text "Reiniciar Dashboard" -OnClick {Show-UDToast -Message "Reiniciando dashboard..." -Duration 3000 -BackgroundColor "#ff9800";Write-DashboardLog -Accion "Reiniciar Dashboard" -Resultado "Solicitado";try{Get-UDDashboard | Stop-UDDashboard;Start-Sleep -Seconds 2;Start-Process powershell -ArgumentList "-ExecutionPolicy Bypass -NoExit -File `"$ScriptRoot\Dashboard.ps1`"" -Verb RunAs;exit}catch{Show-UDToast -Message "Error al reiniciar: $_" -Duration 5000 -BackgroundColor "#f44336"}} -Style @{'background-color'='#ff9800';'color'='white'}
 }
 }}
 New-UDElement -Tag 'hr'
-New-UDElement -Tag 'p' -Attributes @{style=@{'text-align'='center';'color'='#666'}} -Content {"Paradise-SystemLabs Dashboard v1.0 | $(Get-Date -Format 'dd/MM/yyyy HH:mm')"}
+New-UDElement -Tag 'p' -Attributes @{style=@{'text-align'='center';'color'='#666'}} -Content {"Paradise-SystemLabs Dashboard v2.0 | " + (Get-Date -Format 'dd/MM/yyyy HH:mm')}
+}
 }
 Start-UDDashboard -Dashboard $Dashboard -Port 10000 -AutoReload
