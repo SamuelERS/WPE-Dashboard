@@ -45,8 +45,8 @@ echo Presiona Ctrl+C para detener el dashboard
 echo ============================================
 echo.
 
-:: Abrir navegador en segundo plano despues de 8 segundos
-start "" cmd /c "timeout /t 8 /nobreak >nul && start http://localhost:10000"
+:: Abrir navegador moderno en segundo plano despues de 8 segundos
+start "" cmd /c "timeout /t 8 /nobreak >nul && powershell.exe -ExecutionPolicy Bypass -NoProfile -File "%SCRIPT_DIR%\Tools\Abrir-Navegador.ps1""
 
 :: Ejecutar dashboard
 powershell.exe -ExecutionPolicy Bypass -NoExit -NoProfile -Command "& {cd '%SCRIPT_DIR%'; Import-Module UniversalDashboard.Community; . '.\Dashboard.ps1'}"
