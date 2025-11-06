@@ -171,7 +171,7 @@ New-UDCard -Title "INFORMACION DEL SISTEMA" -Content {
 }
 
 New-UDElement -Tag 'hr' -Attributes @{style=@{'margin'='24px 0'}}
-New-UDLayout -Columns 1 -Content {
+New-UDLayout -Columns 2 -Content {
 New-UDCard -Title "CONFIGURACION INICIAL" -Content {
 New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'='12px';'padding'='16px'}} -Content {
 # BOTON 1: Cambiar Nombre PC
@@ -596,8 +596,6 @@ New-UDButton -Text "Instalar Software Base" -OnClick {Show-UDToast -Message "Ins
 New-UDButton -Text "Configurar Email Corporativo" -OnClick {Show-UDToast -Message "Configurando email..." -Duration 2000;Write-DashboardLog -Accion "Email Corp" -Resultado "Iniciado"}
 }
 }
-}
-New-UDElement -Tag 'div' -Attributes @{style=@{'margin-top'='24px'}} -Content {
 New-UDCard -Title "MANTENIMIENTO GENERAL" -Content {
 New-UDElement -Tag 'div' -Attributes @{style=@{'padding'='16px'}} -Content {
 New-UDLayout -Columns 2 -Content {
