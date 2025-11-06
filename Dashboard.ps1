@@ -291,12 +291,41 @@ Show-UDToast -Message "Error al cambiar nombre del PC: $_" -Duration 8000 -Backg
 }
 }
 }
-# BOTON 2: Reiniciar PC (Boton rojo de advertencia)
+# BOTON 2: Reiniciar PC (Boton rojo de advertencia CON CONFIRMACION)
 New-UDButton -Text "REINICIAR PC" -OnClick {
-Show-UDToast -Message "Reiniciando el equipo en 10 segundos..." -Duration 10000 -BackgroundColor "#ff9800"
-Write-DashboardLog -Accion "Reiniciar PC" -Resultado "Solicitado"
+Show-UDModal -Content {
+New-UDHeading -Text "CONFIRMACION DE REINICIO" -Size 4 -Color "#dc3545"
+
+New-UDElement -Tag 'div' -Attributes @{style=@{'padding'='20px';'background-color'='#fff3cd';'border'='2px solid #ff9800';'border-radius'='5px';'margin'='20px 0'}} -Content {
+New-UDElement -Tag 'p' -Attributes @{style=@{'font-size'='16px';'font-weight'='bold';'color'='#dc3545';'margin-bottom'='10px'}} -Content {"ADVERTENCIA CRITICA"}
+New-UDElement -Tag 'p' -Content {"Estas a punto de REINICIAR el equipo:"}
+New-UDElement -Tag 'p' -Attributes @{style=@{'font-weight'='bold';'color'='#000'}} -Content {"PC: $env:COMPUTERNAME"}
+New-UDElement -Tag 'hr'
+New-UDElement -Tag 'p' -Content {"Esto causara:"}
+New-UDElement -Tag 'ul' -Content {
+New-UDElement -Tag 'li' -Content {"Cierre de todas las aplicaciones abiertas"}
+New-UDElement -Tag 'li' -Content {"Posible perdida de trabajo no guardado"}
+New-UDElement -Tag 'li' -Content {"Desconexion de todos los usuarios del equipo"}
+New-UDElement -Tag 'li' -Content {"Detencion del dashboard"}
+}
+}
+
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='12px';'justify-content'='center';'margin-top'='20px'}} -Content {
+New-UDButton -Text "SI, REINICIAR AHORA" -OnClick {
+Show-UDToast -Message "Confirmado. Reiniciando el equipo en 10 segundos..." -Duration 10000 -BackgroundColor "#ff9800"
+Write-DashboardLog -Accion "Reiniciar PC" -Resultado "Confirmado - Usuario: $env:USERNAME - PC: $env:COMPUTERNAME"
+Hide-UDModal
 Start-Sleep -Seconds 3
 Restart-Computer -Force
+} -Style @{'background-color'='#dc3545';'color'='white';'font-weight'='bold';'padding'='12px 24px'}
+
+New-UDButton -Text "CANCELAR" -OnClick {
+Show-UDToast -Message "Reinicio cancelado" -Duration 3000 -BackgroundColor "#4caf50"
+Write-DashboardLog -Accion "Reiniciar PC" -Resultado "Cancelado por usuario"
+Hide-UDModal
+} -Style @{'background-color'='#6c757d';'color'='white';'padding'='12px 24px'}
+}
+} -Header {New-UDHeading -Text "Confirmar Reinicio del Sistema" -Size 5} -FullWidth -MaxWidth 'md' -Persistent
 } -Style @{'background-color'='#dc3545';'color'='white'}
 # BOTON 3: Crear Usuario del Sistema
 New-UDButton -Text "Crear Usuario del Sistema" -OnClick {
@@ -696,7 +725,38 @@ New-UDCard -Title "ACCIONES CRITICAS" -Content {
 New-UDElement -Tag 'div' -Attributes @{style=@{'padding'='16px';'background-color'='#ffe6e6';'border'='2px solid #dc3545';'border-radius'='5px'}} -Content {
 New-UDElement -Tag 'p' -Content {"ADVERTENCIA: Estas acciones afectaran el sistema inmediatamente"}
 New-UDElement -Tag 'div' -Attributes @{style=@{'margin-top'='12px';'display'='flex';'gap'='12px';'flex-wrap'='wrap'}} -Content {
-New-UDButton -Text "REINICIAR PC" -OnClick {Show-UDToast -Message "Reiniciando el equipo en 10 segundos..." -Duration 10000 -BackgroundColor "#ff9800";Write-DashboardLog -Accion "Reiniciar PC" -Resultado "Solicitado";Start-Sleep -Seconds 3;Restart-Computer -Force} -Style @{'background-color'='#dc3545';'color'='white';'font-weight'='bold'}
+New-UDButton -Text "REINICIAR PC" -OnClick {
+Show-UDModal -Content {
+New-UDHeading -Text "CONFIRMACION DE REINICIO" -Size 4 -Color "#dc3545"
+New-UDElement -Tag 'div' -Attributes @{style=@{'padding'='20px';'background-color'='#fff3cd';'border'='2px solid #ff9800';'border-radius'='5px';'margin'='20px 0'}} -Content {
+New-UDElement -Tag 'p' -Attributes @{style=@{'font-size'='16px';'font-weight'='bold';'color'='#dc3545';'margin-bottom'='10px'}} -Content {"ADVERTENCIA CRITICA"}
+New-UDElement -Tag 'p' -Content {"Estas a punto de REINICIAR el equipo:"}
+New-UDElement -Tag 'p' -Attributes @{style=@{'font-weight'='bold';'color'='#000'}} -Content {"PC: $env:COMPUTERNAME"}
+New-UDElement -Tag 'hr'
+New-UDElement -Tag 'p' -Content {"Esto causara:"}
+New-UDElement -Tag 'ul' -Content {
+New-UDElement -Tag 'li' -Content {"Cierre de todas las aplicaciones abiertas"}
+New-UDElement -Tag 'li' -Content {"Posible perdida de trabajo no guardado"}
+New-UDElement -Tag 'li' -Content {"Desconexion de todos los usuarios del equipo"}
+New-UDElement -Tag 'li' -Content {"Detencion del dashboard"}
+}
+}
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='12px';'justify-content'='center';'margin-top'='20px'}} -Content {
+New-UDButton -Text "SI, REINICIAR AHORA" -OnClick {
+Show-UDToast -Message "Confirmado. Reiniciando el equipo en 10 segundos..." -Duration 10000 -BackgroundColor "#ff9800"
+Write-DashboardLog -Accion "Reiniciar PC" -Resultado "Confirmado - Usuario: $env:USERNAME - PC: $env:COMPUTERNAME"
+Hide-UDModal
+Start-Sleep -Seconds 3
+Restart-Computer -Force
+} -Style @{'background-color'='#dc3545';'color'='white';'font-weight'='bold';'padding'='12px 24px'}
+New-UDButton -Text "CANCELAR" -OnClick {
+Show-UDToast -Message "Reinicio cancelado" -Duration 3000 -BackgroundColor "#4caf50"
+Write-DashboardLog -Accion "Reiniciar PC" -Resultado "Cancelado por usuario"
+Hide-UDModal
+} -Style @{'background-color'='#6c757d';'color'='white';'padding'='12px 24px'}
+}
+} -Header {New-UDHeading -Text "Confirmar Reinicio del Sistema" -Size 5} -FullWidth -MaxWidth 'md' -Persistent
+} -Style @{'background-color'='#dc3545';'color'='white';'font-weight'='bold'}
 New-UDButton -Text "Reiniciar Dashboard" -OnClick {Show-UDToast -Message "Reiniciando dashboard..." -Duration 3000 -BackgroundColor "#ff9800";Write-DashboardLog -Accion "Reiniciar Dashboard" -Resultado "Solicitado";try{Get-UDDashboard | Stop-UDDashboard;Start-Sleep -Seconds 2;Start-Process powershell -ArgumentList "-ExecutionPolicy Bypass -NoExit -File `"$ScriptRoot\Dashboard.ps1`"" -Verb RunAs;exit}catch{Show-UDToast -Message "Error al reiniciar: $_" -Duration 5000 -BackgroundColor "#f44336"}} -Style @{'background-color'='#ff9800';'color'='white'}
 }
 }}
