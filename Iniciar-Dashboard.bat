@@ -39,10 +39,14 @@ if not exist "Dashboard.ps1" (
 
 echo [INFO] Iniciando dashboard...
 echo [INFO] URL: http://localhost:10000
+echo [INFO] Abriendo navegador automaticamente...
 echo.
 echo Presiona Ctrl+C para detener el dashboard
 echo ============================================
 echo.
+
+:: Abrir navegador en segundo plano despues de 8 segundos
+start "" cmd /c "timeout /t 8 /nobreak >nul && start http://localhost:10000"
 
 :: Ejecutar dashboard
 powershell.exe -ExecutionPolicy Bypass -NoExit -NoProfile -Command "& {cd '%SCRIPT_DIR%'; Import-Module UniversalDashboard.Community; . '.\Dashboard.ps1'}"

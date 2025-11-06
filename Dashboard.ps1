@@ -228,12 +228,12 @@ Show-UDToast -Message "Error al cambiar nombre del PC: $_" -Duration 8000 -Backg
 }
 # FILA 2: Reiniciar PC (Boton rojo de advertencia)
 New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'margin-bottom'='10px';'flex-wrap'='wrap'}} -Content {
-New-UDButton -Text "Reiniciar PC" -OnClick {
+New-UDButton -Text "REINICIAR PC" -OnClick {
 Show-UDToast -Message "Reiniciando el equipo en 10 segundos..." -Duration 10000 -BackgroundColor "#ff9800"
 Write-DashboardLog -Accion "Reiniciar PC" -Resultado "Solicitado"
 Start-Sleep -Seconds 3
 Restart-Computer -Force
-} -Style @{'background-color'='#dc3545';'color'='white';'border'='none';'padding'='10px 20px';'font-weight'='bold';'box-shadow'='0 2px 4px rgba(0,0,0,0.2)'}
+} -Style @{'background-color'='#dc3545';'color'='white'}
 }
 # FILA 3: Crear Usuario del Sistema
 New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='10px';'margin-bottom'='10px';'flex-wrap'='wrap'}} -Content {
