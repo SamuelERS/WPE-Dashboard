@@ -407,32 +407,42 @@ Show-UDToast -Message "Error al crear usuario: $_" -Duration 8000 -BackgroundCol
 # BOTON 4: Ver Usuarios Actuales
 New-UDButton -Text "Ver Usuarios Actuales" -OnClick {
 try {
-# Obtener todos los usuarios locales del sistema con informacion extendida
-$usuarios = Get-LocalUser | Sort-Object Name
+# Lista de usuarios CRITICOS del sistema que deben ser EXCLUIDOS
+$usuariosExcluidos = @(
+"Administrator",
+"Administrador",
+"DefaultAccount",
+"Guest",
+"Invitado",
+"WDAGUtilityAccount",
+"PARADISE-SYSTEMLABS"
+)
+
+# Obtener todos los usuarios locales y FILTRAR usuarios criticos del sistema
+$todosUsuarios = Get-LocalUser | Sort-Object Name
+$usuarios = $todosUsuarios | Where-Object { $usuariosExcluidos -notcontains $_.Name }
+$usuariosFiltrados = ($todosUsuarios | Measure-Object).Count - ($usuarios | Measure-Object).Count
 
 if ($usuarios) {
 $totalUsuarios = ($usuarios | Measure-Object).Count
 $usuariosActivos = ($usuarios | Where-Object {$_.Enabled} | Measure-Object).Count
 
-# Crear texto formateado con DIAGNOSTICO COMPLETO
-$usuariosTexto = "DIAGNOSTICO COMPLETO DE USUARIOS`n"
-$usuariosTexto += "================================`n`n"
+# Crear texto formateado con presentacion MEJORADA
+$usuariosTexto = "USUARIOS PERSONALIZADOS`n"
+$usuariosTexto += "======================`n`n"
 
 foreach ($user in $usuarios) {
-$estado = if($user.Enabled){"[ACTIVO]"}else{"[INACTIVO]"}
-$lastLogon = if($user.LastLogon){$user.LastLogon.ToString("dd/MM/yyyy HH:mm")}else{"Nunca"}
-$descripcion = if($user.Description){$user.Description}else{"Sin descripcion"}
-$usuariosTexto += "Usuario: $($user.Name) $estado`n"
-$usuariosTexto += "Descripcion: $descripcion`n"
-$usuariosTexto += "Ultimo acceso: $lastLogon`n"
-$usuariosTexto += "Password expira: $($user.PasswordExpires)`n"
-$usuariosTexto += "Cuenta expira: $($user.AccountExpires)`n"
-$usuariosTexto += "SID: $($user.SID)`n"
+$estado = if($user.Enabled){"ACTIVO"}else{"INACTIVO"}
+$lastLogon = if($user.LastLogon){$user.LastLogon.ToString("dd/MM/yyyy HH:mm")}else{"NUNCA"}
+$descripcion = if($user.Description){$user.Description}else{"No description"}
+$usuariosTexto += "USUARIO: $($user.Name) - ESTADO: [$estado]`n"
+$usuariosTexto += "  Descripcion: $descripcion`n"
+$usuariosTexto += "  Ultimo acceso: $lastLogon`n"
 
 # Verificar si tiene carpeta de perfil
-$perfilPath = "C:\Users\$($user.Name)"
-$tienePerfil = Test-Path $perfilPath
-$usuariosTexto += "Carpeta perfil existe: $tienePerfil ($perfilPath)`n"
+$tienePerfil = Test-Path "C:\Users\$($user.Name)"
+$perfilEstado = if($tienePerfil){"EXISTE"}else{"NO EXISTE"}
+$usuariosTexto += "  Perfil: $perfilEstado`n"
 
 # Verificar grupos del usuario
 try {
@@ -441,26 +451,35 @@ $grupos = Get-LocalGroup | Where-Object {
 }
 $gruposNombres = ($grupos | Select-Object -ExpandProperty Name) -join ", "
 if($gruposNombres){
-$usuariosTexto += "Grupos: $gruposNombres`n"
+$usuariosTexto += "  Grupos: $gruposNombres`n"
 }else{
-$usuariosTexto += "Grupos: NINGUNO (PROBLEMA!)`n"
+$usuariosTexto += "  Grupos: NINGUNO`n"
 }
 } catch {
-$usuariosTexto += "Grupos: Error al obtener`n"
+$usuariosTexto += "  Grupos: Error al obtener`n"
 }
 
-$usuariosTexto += "----------------------------------------`n`n"
+$usuariosTexto += "`n========================================`n`n"
 }
+
+# Agregar pie de pagina con informacion de filtrado
+$usuariosTexto += "`n[INFORMACION DEL SISTEMA]`n"
+$usuariosTexto += "- Usuarios personalizados mostrados: $totalUsuarios`n"
+$usuariosTexto += "- Usuarios activos: $usuariosActivos`n"
+$usuariosTexto += "- Usuarios del sistema filtrados: $usuariosFiltrados`n"
+$usuariosTexto += "- PC: $env:COMPUTERNAME`n"
 
 Show-UDModal -Content {
 New-UDHeading -Text "Usuarios en: $env:COMPUTERNAME" -Size 4
-New-UDElement -Tag 'p' -Content {"Total de usuarios: $totalUsuarios | Activos: $usuariosActivos"}
-New-UDElement -Tag 'pre' -Attributes @{style=@{'background-color'='#f5f5f5';'padding'='15px';'border-radius'='5px';'font-family'='Consolas, monospace';'font-size'='12px';'overflow-x'='auto';'white-space'='pre-wrap';'max-height'='600px'}} -Content {$usuariosTexto}
+New-UDElement -Tag 'div' -Attributes @{style=@{'background-color'='#e8f5e9';'padding'='10px';'border-radius'='5px';'margin-bottom'='15px';'border-left'='4px solid #4caf50'}} -Content {
+New-UDElement -Tag 'p' -Content {"Usuarios personalizados: $totalUsuarios | Activos: $usuariosActivos | Sistema filtrados: $usuariosFiltrados"}
+}
+New-UDElement -Tag 'pre' -Attributes @{style=@{'background-color'='#f5f5f5';'padding'='15px';'border-radius'='5px';'font-family'='Consolas, monospace';'font-size'='13px';'overflow-x'='auto';'white-space'='pre-wrap';'max-height'='500px';'line-height'='1.6'}} -Content {$usuariosTexto}
 } -Header {New-UDHeading -Text "Usuarios del Sistema - DIAGNOSTICO" -Size 5}
 
-Write-DashboardLog -Accion "Ver Usuarios" -Resultado "Exitoso - PC: $env:COMPUTERNAME - Total: $totalUsuarios"
+Write-DashboardLog -Accion "Ver Usuarios" -Resultado "Exitoso - PC: $env:COMPUTERNAME - Mostrados: $totalUsuarios - Filtrados: $usuariosFiltrados"
 } else {
-Show-UDToast -Message "No se encontraron usuarios en el sistema" -Duration 3000 -BackgroundColor "#ff9800"
+Show-UDToast -Message "No se encontraron usuarios personalizados en el sistema" -Duration 3000 -BackgroundColor "#ff9800"
 }
 } catch {
 Write-DashboardLog -Accion "Ver Usuarios" -Resultado "Error: $_"
