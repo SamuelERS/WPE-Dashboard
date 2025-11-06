@@ -597,13 +597,11 @@ New-UDButton -Text "Configurar Email Corporativo" -OnClick {Show-UDToast -Messag
 }
 }
 New-UDCard -Title "MANTENIMIENTO GENERAL" -Content {
-New-UDElement -Tag 'div' -Attributes @{style=@{'padding'='16px'}} -Content {
-New-UDLayout -Columns 2 -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'='12px';'padding'='16px'}} -Content {
 New-UDButton -Text "Windows Update" -OnClick {Show-UDToast -Message "Verificando actualizaciones..." -Duration 2000;Write-DashboardLog -Accion "Windows Update" -Resultado "Iniciado"}
 New-UDButton -Text "Limpieza de Disco" -OnClick {Show-UDToast -Message "Limpiando disco..." -Duration 2000;Write-DashboardLog -Accion "Limpieza Disco" -Resultado "Iniciado"}
 New-UDButton -Text "Verificar Sistema" -Style @{'background-color'='#4caf50';'color'='white'} -OnClick {Show-UDToast -Message "Verificando..." -Duration 2000;Write-DashboardLog -Accion "Verificar Sistema" -Resultado "Iniciado"}
 New-UDButton -Text "Optimizar Rendimiento" -OnClick {Show-UDToast -Message "Optimizando..." -Duration 2000;Write-DashboardLog -Accion "Optimizar" -Resultado "Iniciado"} -Style @{'background-color'='#4caf50';'color'='white'}
-}
 }
 }
 }
