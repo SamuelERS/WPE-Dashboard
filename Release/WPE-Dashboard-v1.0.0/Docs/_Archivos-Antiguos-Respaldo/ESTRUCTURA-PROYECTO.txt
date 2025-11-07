@@ -1,0 +1,204 @@
+================================================================================
+                    ESTRUCTURA DEL PROYECTO
+                  Dashboard IT - Paradise-SystemLabs
+================================================================================
+
+C:\WPE-Dashboard\
+│
+├── 📄 RAIZ (Solo archivos esenciales)
+│   ├── Dashboard.ps1                # Dashboard principal (7.4 KB)
+│   ├── Iniciar-Dashboard.bat        # Lanzador con permisos admin (0.6 KB)
+│   ├── README.md                    # Documentacion principal (10.2 KB)
+│   └── .gitignore                   # Control de versiones (0.5 KB)
+│
+├── 📚 Docs/ (Toda la documentacion)
+│   ├── LEEME-PRIMERO.txt           # Bienvenida y primeros pasos
+│   ├── INICIO-RAPIDO.txt           # Guia de 5 minutos
+│   ├── REGLAS-DE-LA-CASA.md        # Reglas obligatorias del proyecto
+│   ├── GUIA-AGREGAR-SCRIPTS.md     # Tutorial para migrar scripts
+│   ├── COMANDOS-UTILES.md          # Referencia de comandos PowerShell
+│   ├── PROGRESO.md                 # Estado del proyecto
+│   ├── RESUMEN-EJECUTIVO.md        # Vision ejecutiva
+│   ├── CHANGELOG.md                # Registro de cambios
+│   ├── IMPLEMENTADO-HOY.md         # Resumen de sesiones
+│   ├── INDICE-DOCUMENTACION.md     # Indice completo
+│   ├── ESTRUCTURA-PROYECTO.txt     # Este archivo
+│   └── CLAUDE.md                   # Notas de desarrollo
+│
+├── 🔧 Scripts/ (Scripts de automatizacion)
+│   ├── ScriptLoader.ps1            # Sistema de carga automatica
+│   ├── PLANTILLA-Script.ps1        # Template para nuevos scripts
+│   │
+│   ├── Configuracion/              # Scripts de setup inicial
+│   │   └── Crear-Usuario-Sistema.ps1
+│   │
+│   ├── Mantenimiento/              # Scripts de mantenimiento
+│   │   └── Limpiar-Archivos-Temporales.ps1
+│   │
+│   ├── POS/                        # Scripts de punto de venta
+│   │   ├── Crear-Usuario-POS.ps1
+│   │   └── Crear-Usuario.ps1
+│   │
+│   ├── Diseno/                     # Scripts de diseno grafico
+│   │
+│   ├── Atencion-Al-Cliente/        # Scripts de atencion al cliente
+│   │
+│   └── Auditoria/                  # Scripts de auditoria
+│
+├── 🛠️ Tools/ (Herramientas de utilidad)
+│   ├── Verificar-Sistema.ps1       # Diagnostico completo del sistema
+│   └── Detener-Dashboard.ps1       # Detener dashboard de forma segura
+│
+├── 📊 Logs/ (Logs del sistema - auto-generados)
+│   ├── .gitkeep                    # Mantener carpeta en git
+│   └── dashboard-YYYY-MM.log       # Logs mensuales (ignorados en git)
+│
+├── 📦 Backup/ (Backups automaticos - ignorado en git)
+│   └── .gitkeep                    # Mantener carpeta en git
+│
+└── 🗂️ Temp/ (Archivos temporales - ignorado en git)
+    └── .gitkeep                    # Mantener carpeta en git
+
+
+================================================================================
+  REGLAS DE LA CASA - RESUMEN
+================================================================================
+
+🔴 RAIZ
+  ✅ Solo: Dashboard.ps1, Iniciar-Dashboard.bat, README.md, .gitignore
+  ❌ NO: Documentacion, herramientas, scripts, temporales
+
+📚 Docs/
+  ✅ Toda la documentacion (.md, .txt)
+  ❌ NO: Scripts ejecutables
+
+🔧 Scripts/
+  ✅ Scripts de produccion organizados por categoria
+  ❌ NO: Scripts de prueba (van en Temp/), herramientas (van en Tools/)
+
+🛠️ Tools/
+  ✅ Herramientas de mantenimiento del dashboard
+  ❌ NO: Scripts de produccion (van en Scripts/)
+
+📊 Logs/
+  ✅ Auto-generados por el sistema
+  ❌ NO: Editar manualmente, commitear en git
+
+📦 Backup/
+  ✅ Backups automaticos y manuales
+  ❌ NO: Commitear en git
+
+🗂️ Temp/
+  ✅ Scripts en prueba, borradores, temporales
+  ❌ NO: Commitear en git, dejar archivos importantes
+
+
+================================================================================
+  CONVENCIONES DE NOMBRES
+================================================================================
+
+ARCHIVOS POWERSHELL (.ps1)
+  Formato: PascalCase-Con-Guiones.ps1
+  Ejemplos:
+    ✅ Crear-Usuario-Sistema.ps1
+    ✅ Limpiar-Archivos-Temporales.ps1
+    ❌ crear_usuario.ps1
+
+DOCUMENTACION MARKDOWN (.md)
+  Formato: MAYUSCULAS-CON-GUIONES.md (principales)
+           PascalCase-Con-Guiones.md (tecnicos)
+  Ejemplos:
+    ✅ README.md
+    ✅ CHANGELOG.md
+    ✅ GUIA-AGREGAR-SCRIPTS.md
+    ❌ readme.md
+
+DOCUMENTACION TEXTO (.txt)
+  Formato: MAYUSCULAS-CON-GUIONES.txt
+  Ejemplos:
+    ✅ LEEME-PRIMERO.txt
+    ✅ INICIO-RAPIDO.txt
+    ❌ leeme.txt
+
+CARPETAS
+  Formato: PascalCase (sin guiones)
+  Ejemplos:
+    ✅ Docs, Scripts, Tools
+    ✅ Configuracion, AtencionAlCliente
+    ❌ docs, atencion-al-cliente
+
+
+================================================================================
+  ESTADISTICAS DEL PROYECTO
+================================================================================
+
+CARPETAS:              7 carpetas principales
+ARCHIVOS EN RAIZ:      4 archivos esenciales
+DOCUMENTACION:        12 documentos
+SCRIPTS:               5 scripts (2 produccion, 2 ejemplos, 1 plantilla)
+HERRAMIENTAS:          2 utilidades
+CATEGORIAS:            6 categorias de scripts
+
+TAMANO TOTAL:         ~100 KB (sin logs ni backups)
+
+
+================================================================================
+  ACCESO RAPIDO
+================================================================================
+
+INICIAR DASHBOARD:
+  Doble clic en: Iniciar-Dashboard.bat
+
+LEER PRIMERO:
+  Docs\LEEME-PRIMERO.txt
+
+REGLAS COMPLETAS:
+  Docs\REGLAS-DE-LA-CASA.md
+
+AGREGAR SCRIPTS:
+  Docs\GUIA-AGREGAR-SCRIPTS.md
+
+VERIFICAR SISTEMA:
+  Tools\Verificar-Sistema.ps1
+
+DETENER DASHBOARD:
+  Tools\Detener-Dashboard.ps1
+
+
+================================================================================
+  MANTENIMIENTO
+================================================================================
+
+LIMPIEZA SEMANAL:
+  - Revisar carpeta Temp/ y eliminar archivos viejos
+  - Verificar que no haya archivos en raiz que no deban estar
+
+LIMPIEZA MENSUAL:
+  - Revisar logs antiguos (>6 meses) en Logs/
+  - Limpiar backups antiguos en Backup/
+
+VERIFICACION:
+  - Ejecutar Tools\Verificar-Sistema.ps1 regularmente
+  - Revisar que se cumplan las reglas de la casa
+
+
+================================================================================
+  VERSION Y CONTACTO
+================================================================================
+
+Version:              1.2
+Fecha:                Noviembre 2025
+Estado:               PRODUCCION
+Proyecto:             Dashboard IT Paradise-SystemLabs
+
+
+Para mas informacion, consulta:
+  - README.md (raiz)
+  - Docs\REGLAS-DE-LA-CASA.md
+  - Docs\INDICE-DOCUMENTACION.md
+
+
+================================================================================
+                    Dashboard IT - Paradise-SystemLabs
+              Automatizacion inteligente para equipos eficientes
+================================================================================

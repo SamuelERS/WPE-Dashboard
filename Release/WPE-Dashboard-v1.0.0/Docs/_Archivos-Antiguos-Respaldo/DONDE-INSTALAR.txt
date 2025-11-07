@@ -1,0 +1,168 @@
+================================================================================
+  DONDE INSTALAR EL DASHBOARD - Guia de Ubicaciones
+================================================================================
+
+Cuando copies la carpeta WPE-Dashboard a una PC nueva, estas son las mejores
+ubicaciones (ordenadas de mejor a peor):
+
+================================================================================
+  OPCION 1: C:\ProgramData\WPE-Dashboard (RECOMENDADO)
+================================================================================
+
+VENTAJAS:
+  ✓ Diseñado especificamente para datos de aplicaciones compartidas
+  ✓ Facil de copiar (no requiere permisos especiales)
+  ✓ Accesible para todos los usuarios de la PC
+  ✓ Los logs se escriben sin problemas de permisos
+  ✓ Puedes copiar el ZIP directamente sin descomprimir primero
+
+COMO COPIAR:
+  1. Abre el Explorador de Windows
+  2. Navega a: C:\ProgramData\
+  3. Pega la carpeta WPE-Dashboard ahi
+  4. Ejecuta: C:\ProgramData\WPE-Dashboard\Instalar-Dependencias.bat
+
+NOTA: Si no ves la carpeta ProgramData, es porque esta oculta.
+      Para verla: Explorador > Vista > Marcar "Elementos ocultos"
+
+================================================================================
+  OPCION 2: C:\Users\Public\WPE-Dashboard
+================================================================================
+
+VENTAJAS:
+  ✓ Muy facil de acceder
+  ✓ No requiere permisos especiales
+  ✓ Visible para todos los usuarios
+  ✓ No esta oculta (facil de encontrar)
+
+COMO COPIAR:
+  1. Abre el Explorador de Windows
+  2. Navega a: C:\Users\Public\
+  3. Pega la carpeta WPE-Dashboard ahi
+  4. Ejecuta: C:\Users\Public\WPE-Dashboard\Instalar-Dependencias.bat
+
+================================================================================
+  OPCION 3: D:\WPE-Dashboard (si tienes disco D:)
+================================================================================
+
+VENTAJAS:
+  ✓ La mas simple de todas
+  ✓ Sin restricciones de permisos
+  ✓ Separado del sistema operativo
+  ✓ Facil de respaldar
+
+COMO COPIAR:
+  1. Abre el Explorador de Windows
+  2. Navega a: D:\
+  3. Pega la carpeta WPE-Dashboard ahi
+  4. Ejecuta: D:\WPE-Dashboard\Instalar-Dependencias.bat
+
+================================================================================
+  OPCION 4: C:\Program Files\WPE-Dashboard
+================================================================================
+
+VENTAJAS:
+  ✓ Ubicacion estandar para aplicaciones empresariales
+  ✓ Protegido contra modificaciones accidentales
+
+DESVENTAJAS:
+  ✗ Requiere permisos de administrador para copiar
+  ✗ Puede dar problemas al escribir logs
+
+COMO COPIAR:
+  1. Abre el Explorador de Windows COMO ADMINISTRADOR
+     (Click derecho en Explorador > Ejecutar como administrador)
+  2. Navega a: C:\Program Files\
+  3. Pega la carpeta WPE-Dashboard ahi
+  4. Ejecuta: C:\Program Files\WPE-Dashboard\Instalar-Dependencias.bat
+
+================================================================================
+  NO RECOMENDADO: C:\WPE-Dashboard (raiz del disco C)
+================================================================================
+
+PROBLEMAS:
+  ✗ Windows protege la raiz de C:\ con permisos especiales
+  ✗ No puedes copiar archivos ZIP directamente
+  ✗ Tienes que descomprimir primero y luego copiar
+  ✗ Puede dar errores de permisos
+
+Si YA la tienes ahi y funciona, dejala. Pero para PCs nuevas usa otra ubicacion.
+
+================================================================================
+  DEPLOYMENT EN RED COMPARTIDA (Para multiples PCs)
+================================================================================
+
+Si quieres tener UNA SOLA copia del dashboard para TODAS las PCs:
+
+UBICACION RECOMENDADA:
+  \\servidor\Compartido\IT\WPE-Dashboard\
+
+COMO USARLO:
+  1. Copia la carpeta a la red compartida
+  2. En cada PC, ejecuta el instalador UNA SOLA VEZ:
+     \\servidor\Compartido\IT\WPE-Dashboard\Instalar-Dependencias.bat
+
+  3. Para usar el dashboard en cada PC:
+     \\servidor\Compartido\IT\WPE-Dashboard\Iniciar-Dashboard.bat
+
+VENTAJAS:
+  ✓ Una sola copia del codigo (actualizaciones centralizadas)
+  ✓ Cada PC ejecuta el dashboard LOCALMENTE (no remoto)
+  ✓ Los logs se guardan en la red (centralizados)
+
+DESVENTAJAS:
+  ✗ Requiere conexion de red
+  ✗ Si la red falla, no funciona
+
+================================================================================
+  RESUMEN RAPIDO
+================================================================================
+
+Para UNA PC:
+  → Usa: C:\ProgramData\WPE-Dashboard
+
+Para MULTIPLES PCs:
+  → Usa: \\servidor\Compartido\IT\WPE-Dashboard
+
+Si tienes disco D:
+  → Usa: D:\WPE-Dashboard
+
+Si nada mas funciona:
+  → Usa: C:\Users\Public\WPE-Dashboard
+
+================================================================================
+  DESPUES DE COPIAR
+================================================================================
+
+1. Ejecuta el instalador (SOLO LA PRIMERA VEZ):
+   Instalar-Dependencias.bat
+
+2. Espera a que termine (2-5 minutos)
+
+3. Inicia el dashboard:
+   Iniciar-Dashboard.bat
+
+4. Abre tu navegador en:
+   http://localhost:10000
+
+================================================================================
+  BENEFICIO DEL DASHBOARD PORTABLE
+================================================================================
+
+El dashboard ahora es PORTABLE - funciona en CUALQUIER ubicacion.
+
+No importa si lo copias a:
+  - C:\ProgramData\WPE-Dashboard
+  - D:\WPE-Dashboard
+  - C:\Users\Public\WPE-Dashboard
+  - \\servidor\IT\WPE-Dashboard
+
+TODO funcionara automaticamente. Los logs, scripts y configuraciones
+se adaptan a la ubicacion donde este la carpeta.
+
+================================================================================
+
+Version: 1.1
+Ultima actualizacion: Noviembre 2025
+
+================================================================================

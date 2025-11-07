@@ -1,0 +1,159 @@
+[2025-11-04 08:05:02] Limpieza Disco - Iniciado
+[2025-11-04 08:05:06] Verificar Sistema - Iniciado
+[2025-11-04 08:05:16] Windows Update - Iniciado
+[2025-11-04 08:05:20] Crear Usuario Merliot - Exitoso
+[2025-11-04 09:32:47] Crear Usuario Merliot - Exitoso
+[2025-11-04 09:38:47] Crear Usuario Merliot - Exitoso
+[2025-11-04 11:27:55] Crear Usuario Sistema - Exitoso
+[2025-11-04 11:31:16] Crear Usuario Sistema - Exitoso
+[2025-11-04 11:31:22] Crear Usuario Sistema - Exitoso
+[2025-11-04 11:31:31] Crear Usuario Sistema - Exitoso
+[2025-11-04 11:31:56] Crear Usuario Sistema - Exitoso
+[2025-11-04 11:34:07] Crear Usuario Sistema - Exitoso
+[2025-11-04 11:36:26] Crear Usuario Sistema - Exitoso
+[2025-11-04 11:36:32] Crear Usuario Sistema - Exitoso
+[2025-11-04 11:36:38] Crear Usuario Sistema - Exitoso
+[2025-11-04 11:37:03] Crear Usuario Sistema - Exitoso
+[2025-11-04 11:37:12] Crear Usuario Sistema - Exitoso
+[2025-11-04 11:39:29] Crear Usuario - Error: Acceso denegado.
+[2025-11-04 11:39:37] Crear Usuario - Error: Acceso denegado.
+[2025-11-04 11:39:43] Crear Usuario - Error: Acceso denegado.
+[2025-11-04 12:28:09] Reiniciar Dashboard - Solicitado
+[2025-11-04 12:30:52] Crear Usuario - Error: No se encontró el grupo Users.
+[2025-11-04 12:31:01] Crear Usuario - Error: El usuario POS-IrvinAbarca ya existe.
+[2025-11-04 12:31:10] Crear Usuario - Error: El usuario POS-IrvinAbarca ya existe.
+[2025-11-04 12:37:18] Crear Usuario (POS-IrvinAbarca) - Error: Usuario ya existe
+[2025-11-04 12:37:50] Config Biometria - Iniciado
+[2025-11-04 12:53:19] Crear Usuario (POS-TitoGomez) - Error: No se encontró el grupo Users.
+[2025-11-04 12:53:31] Crear Usuario (POS-TitoGomez) - Error: Usuario ya existe
+[2025-11-04 14:44:19] Crear Usuario (Test2) - Error: No se encontró el grupo Users.
+[2025-11-04 14:44:33] Crear Usuario (Test2) - Error: Usuario ya existe
+[2025-11-04 14:58:11] Reiniciar Dashboard - Solicitado
+[2025-11-04 15:54:48] Cambiar Nombre PC - Exitoso: DESKTOP-VHIMQ05 -> POS-Merliot
+[2025-11-04 17:18:35] Cambiar Nombre PC - Exitoso: DESKTOP-VHIMQ05 -> POS-Merliot
+[2025-11-04 17:18:44] Reiniciar Dashboard - Solicitado
+[2025-11-04 18:53:29] Reiniciar Dashboard - Solicitado
+[2025-11-04 19:09:54] === Iniciando descubrimiento de red ===
+[2025-11-04 19:09:54] Subred: 192.168.1 | Tipo: Rapido | Verificar WinRM: Si
+[2025-11-04 19:09:54] Usando cache ARP para descubrimiento rapido
+[2025-11-04 19:10:23] Descubrimiento completado: 2 equipos encontrados
+[2025-11-04 19:10:23] Resultados exportados a: C:\WPE-Dashboard\Logs\network-discovery-2025-11-04-191023.csv
+[2025-11-04 19:10:23] Resumen: Encontrados: 2 equipos | Con WinRM: 0 | Sin WinRM: 2
+[2025-11-04 19:10:23] === Iniciando descubrimiento de red ===
+[2025-11-04 19:10:23] Subred: 192.168.1 | Tipo: Rapido | Verificar WinRM: Si
+[2025-11-04 19:10:23] Usando cache ARP para descubrimiento rapido
+[2025-11-04 19:10:48] Descubrimiento completado: 2 equipos encontrados
+[2025-11-04 19:10:48] Resultados exportados a: C:\WPE-Dashboard\Logs\network-discovery-2025-11-04-191048.csv
+[2025-11-04 19:10:48] Resumen: Encontrados: 2 equipos | Con WinRM: 0 | Sin WinRM: 2
+[2025-11-04 19:11:52] === Iniciando descubrimiento de red ===
+[2025-11-04 19:11:52] Subred: 192.168.1 | Tipo: Rapido | Verificar WinRM: Si
+[2025-11-04 19:11:52] Usando cache ARP para descubrimiento rapido
+[2025-11-04 19:12:16] Descubrimiento completado: 2 equipos encontrados
+[2025-11-04 19:12:16] Resultados exportados a: C:\WPE-Dashboard\Logs\network-discovery-2025-11-04-191216.csv
+[2025-11-04 19:12:16] Resumen: Encontrados: 2 equipos | Con WinRM: 0 | Sin WinRM: 2
+[2025-11-04 19:18:41] Reiniciar Dashboard - Solicitado
+[2025-11-04 19:20:04] === Iniciando descubrimiento de red ===
+[2025-11-04 19:20:04] Subred: 192.168.1 | Tipo: Rapido | Verificar WinRM: Si
+[2025-11-04 19:20:04] Usando cache ARP para descubrimiento rapido
+[2025-11-04 19:21:18] === Iniciando descubrimiento de red ===
+[2025-11-04 19:21:18] Subred: 192.168.1 | Tipo: Rapido | Verificar WinRM: Si
+[2025-11-04 19:21:18] Usando cache ARP para descubrimiento rapido
+[2025-11-04 19:21:43] Descubrimiento completado: 2 equipos encontrados
+[2025-11-04 19:21:43] Resultados exportados a: C:\WPE-Dashboard\Logs\network-discovery-2025-11-04-192143.csv
+[2025-11-04 19:21:43] Resumen: Encontrados: 2 equipos | Con WinRM: 0 | Sin WinRM: 2
+[2025-11-04 19:21:44] === Iniciando descubrimiento de red ===
+[2025-11-04 19:21:44] Subred: 192.168.1 | Tipo: Rapido | Verificar WinRM: Si
+[2025-11-04 19:21:44] Usando cache ARP para descubrimiento rapido
+[2025-11-04 19:22:08] Descubrimiento completado: 2 equipos encontrados
+[2025-11-04 19:22:08] Resultados exportados a: C:\WPE-Dashboard\Logs\network-discovery-2025-11-04-192208.csv
+[2025-11-04 19:22:08] Resumen: Encontrados: 2 equipos | Con WinRM: 0 | Sin WinRM: 2
+[2025-11-04 19:22:08] === Iniciando descubrimiento de red ===
+[2025-11-04 19:22:08] Subred: 192.168.1 | Tipo: Rapido | Verificar WinRM: Si
+[2025-11-04 19:22:08] Usando cache ARP para descubrimiento rapido
+[2025-11-04 19:22:34] Descubrimiento completado: 2 equipos encontrados
+[2025-11-04 19:22:34] Resultados exportados a: C:\WPE-Dashboard\Logs\network-discovery-2025-11-04-192234.csv
+[2025-11-04 19:22:34] Resumen: Encontrados: 2 equipos | Con WinRM: 0 | Sin WinRM: 2
+[2025-11-04 19:24:39] === Iniciando descubrimiento de red ===
+[2025-11-04 19:24:39] Subred: 192.168.1 | Tipo: Rapido | Verificar WinRM: Si
+[2025-11-04 19:24:39] Usando cache ARP para descubrimiento rapido
+[2025-11-04 19:25:04] Descubrimiento completado: 2 equipos encontrados
+[2025-11-04 19:25:04] Resultados exportados a: C:\WPE-Dashboard\Logs\network-discovery-2025-11-04-192504.csv
+[2025-11-04 19:25:04] Resumen: Encontrados: 2 equipos | Con WinRM: 0 | Sin WinRM: 2
+[2025-11-04 19:27:24] Reiniciar Dashboard - Solicitado
+[2025-11-04 19:30:47] === Iniciando descubrimiento de red ===
+[2025-11-04 19:30:47] Subred: 192.168.1 | Tipo: Rapido | Verificar WinRM: Si
+[2025-11-04 19:30:47] Usando cache ARP para descubrimiento rapido
+[2025-11-04 19:31:14] Descubrimiento completado: 2 equipos encontrados
+[2025-11-04 19:31:14] Resultados exportados a: C:\WPE-Dashboard\Logs\network-discovery-2025-11-04-193114.csv
+[2025-11-04 19:31:14] Resumen: Encontrados: 2 equipos | Con WinRM: 0 | Sin WinRM: 2
+[2025-11-04 19:31:14] === Iniciando descubrimiento de red ===
+[2025-11-04 19:31:14] Subred: 192.168.1 | Tipo: Rapido | Verificar WinRM: Si
+[2025-11-04 19:31:14] Usando cache ARP para descubrimiento rapido
+[2025-11-04 19:31:40] Descubrimiento completado: 2 equipos encontrados
+[2025-11-04 19:31:40] Resultados exportados a: C:\WPE-Dashboard\Logs\network-discovery-2025-11-04-193140.csv
+[2025-11-04 19:31:40] Resumen: Encontrados: 2 equipos | Con WinRM: 0 | Sin WinRM: 2
+[2025-11-04 19:31:52] === Iniciando descubrimiento de red ===
+[2025-11-04 19:31:52] Subred: 192.168.1 | Tipo: Rapido | Verificar WinRM: Si
+[2025-11-04 19:31:52] Usando cache ARP para descubrimiento rapido
+[2025-11-04 19:32:18] Descubrimiento completado: 2 equipos encontrados
+[2025-11-04 19:32:18] Resultados exportados a: C:\WPE-Dashboard\Logs\network-discovery-2025-11-04-193218.csv
+[2025-11-04 19:32:18] Resumen: Encontrados: 2 equipos | Con WinRM: 0 | Sin WinRM: 2
+[2025-11-04 19:33:30] === Iniciando descubrimiento de red ===
+[2025-11-04 19:33:30] Subred: 192.168.1 | Tipo: Rapido | Verificar WinRM: Si
+[2025-11-04 19:33:30] Usando cache ARP para descubrimiento rapido
+[2025-11-04 19:33:56] Descubrimiento completado: 2 equipos encontrados
+[2025-11-04 19:33:56] Resultados exportados a: C:\WPE-Dashboard\Logs\network-discovery-2025-11-04-193356.csv
+[2025-11-04 19:33:56] Resumen: Encontrados: 2 equipos | Con WinRM: 0 | Sin WinRM: 2
+[2025-11-04 19:37:15] === Iniciando descubrimiento de red ===
+[2025-11-04 19:37:15] Subred: 192.168.1 | Tipo: Rapido | Verificar WinRM: Si
+[2025-11-04 19:37:15] Usando cache ARP para descubrimiento rapido
+[2025-11-04 19:37:39] Descubrimiento completado: 2 equipos encontrados
+[2025-11-04 19:37:39] Resultados exportados a: C:\WPE-Dashboard\Logs\network-discovery-2025-11-04-193739.csv
+[2025-11-04 19:37:39] Resumen: Encontrados: 2 equipos | Con WinRM: 0 | Sin WinRM: 2
+[2025-11-04 19:37:46] Reiniciar Dashboard - Solicitado
+[2025-11-04 19:41:42] === Iniciando descubrimiento de red ===
+[2025-11-04 19:41:42] Subred: 192.168.1 | Tipo: Completo | Verificar WinRM: Si
+[2025-11-04 19:41:42] Realizando escaneo completo de 192.168.1.1-254
+[2025-11-04 19:41:44] Esperando resultados del escaneo (max 60 segundos)...
+[2025-11-04 19:49:54] Descubrimiento completado: 0 equipos encontrados
+[2025-11-04 19:49:54] Resumen: Encontrados: 0 equipos | Con WinRM: 0 | Sin WinRM: 0
+[2025-11-04 20:00:44] Reiniciar Dashboard - Solicitado
+[2025-11-04 20:08:58] Reiniciar Dashboard - Solicitado
+[2025-11-04 20:14:09] Cambiar Nombre PC - Exitoso: POS-MERLIOT -> Server-Paradise
+[2025-11-04 20:51:42] Reiniciar Dashboard - Solicitado
+[2025-11-04 20:53:18] Crear Usuario (POS-Merliot) - Error: No se encontró el grupo Users.
+[2025-11-04 20:53:28] Crear Usuario (POS-Merliot) - Error: Usuario ya existe
+[2025-11-04 20:55:55] Reiniciar Dashboard - Solicitado
+[2025-11-04 20:56:21] Ver Usuarios - Exitoso - PC: SERVER-PARADISE - Total: 9
+[2025-11-04 20:58:01] Reiniciar Dashboard - Solicitado
+[2025-11-04 20:58:45] Ver Usuarios - Exitoso - PC: SERVER-PARADISE - Total: 9
+[2025-11-04 21:03:46] Reiniciar Dashboard - Solicitado
+[2025-11-04 21:04:04] Ver Usuarios - Exitoso - PC: SERVER-PARADISE - Total: 9
+[2025-11-04 21:04:23] Crear Usuario (Test2-POS) - Error: No se encontró el grupo Users.
+[2025-11-04 21:04:32] Crear Usuario (Test2-POS) - Error: Usuario ya existe
+[2025-11-04 21:10:52] Reparar Usuarios - Reparados: 6, Errores: 0 - PC: SERVER-PARADISE
+[2025-11-04 21:13:51] Crear Usuario (Test3-POS) - Error: No se encontró el grupo Users.
+[2025-11-04 21:14:02] Crear Usuario (Test3-POS) - Error: Usuario ya existe
+[2025-11-04 21:18:59] Crear Usuario (Test4-POS) - Error: El término 'wmic' no se reconoce como nombre de un cmdlet, función, archivo de script o programa ejecutable. Compruebe si escribió correctamente el nombre o, si incluyó una ruta de acceso, compruebe que dicha ruta es correcta e inténtelo de nuevo.
+[2025-11-04 21:20:48] Reiniciar Dashboard - Solicitado
+[2025-11-04 21:21:35] Crear Usuario (Test5-POS) - Exitoso - PC: SERVER-PARADISE - Usuario configurado para login
+[2025-11-04 21:26:20] Diagnostico Login - Completado
+[2025-11-04 21:26:55] Reparar Usuarios - Reparados: 9, Errores: 0 - PC: SERVER-PARADISE
+[2025-11-04 21:26:56] Ver Usuarios - Exitoso - PC: SERVER-PARADISE - Total: 13
+[2025-11-04 21:27:42] Crear Usuario (POS-Merliot6) - Exitoso - PC: SERVER-PARADISE - Usuario configurado para login
+[2025-11-04 21:34:17] Crear Usuario (Test7-POS) - Exitoso - PC: SERVER-PARADISE - Usuario configurado para login
+[2025-11-04 21:37:16] Ver Usuarios - Exitoso - PC: SERVER-PARADISE - Total: 15
+[2025-11-04 21:37:47] Reparar Usuarios - Reparados: 11, Errores: 0 - PC: SERVER-PARADISE
+[2025-11-04 21:37:47] Diagnostico Login - Completado
+[2025-11-04 21:38:09] Reiniciar Dashboard - Solicitado
+[2025-11-04 21:39:01] Ver Usuarios - Exitoso - PC: SERVER-PARADISE - Total: 15
+[2025-11-04 21:40:42] Reiniciar Dashboard - Solicitado
+[2025-11-04 21:41:07] Ver Usuarios - Exitoso - PC: SERVER-PARADISE - Total: 15
+[2025-11-04 21:41:15] Ver Usuarios - Exitoso - PC: SERVER-PARADISE - Total: 15
+[2025-11-04 21:46:00] Reiniciar Dashboard - Solicitado
+[2025-11-06 08:22:33] Reiniciar Dashboard - Solicitado
+[2025-11-06 11:11:29] Reiniciar Dashboard - Solicitado
+[2025-11-06 15:16:57] Ver Usuarios - Exitoso - PC: DESKTOP-VHIMQ05 - Total: 5
+[2025-11-06 15:52:30] Ver Usuarios - Exitoso - PC: DESKTOP-VHIMQ05 - Total: 5
+[2025-11-06 16:02:45] Ver Usuarios - Exitoso - PC: DESKTOP-VHIMQ05 - Mostrados: 1 - Filtrados: 4
+[2025-11-06 16:05:45] Windows Update - Iniciado
