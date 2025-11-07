@@ -1,0 +1,33 @@
+{
+  "server": {
+    "port": 10000,
+    "autoReload": true,
+    "title": "Paradise-SystemLabs - Dashboard IT"
+  },
+  "paths": {
+    "logs": "Logs",
+    "scripts": "Scripts",
+    "backup": "Backup",
+    "temp": "Temp",
+    "components": "Components",
+    "utils": "Utils",
+    "config": "Config"
+  },
+  "logging": {
+    "enabled": true,
+    "level": "info",
+    "maxFileSizeMB": 10,
+    "retentionDays": 180,
+    "format": "[{timestamp}] [{level}] [{component}] {message}"
+  },
+  "features": {
+    "autoBackup": true,
+    "telemetry": false,
+    "debugMode": false
+  },
+  "ui": {
+    "showWelcomeMessage": true,
+    "showSystemInfo": true,
+    "refreshInterval": 30
+  }
+}
