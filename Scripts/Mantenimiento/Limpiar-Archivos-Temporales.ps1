@@ -1,14 +1,29 @@
+# ============================================
+# LIMPIAR ARCHIVOS TEMPORALES
+# ============================================
 # @Name: Limpieza de Archivos Temporales
 # @Description: Elimina archivos temporales de Windows y usuario para liberar espacio
-# @RequiresAdmin: true
+# @Category: Mantenimiento
+# @RequiresAdmin: false
 # @HasForm: false
 
-function Write-ScriptLog {
-    param([string]$Mensaje)
-    $LogFile = "C:\WPE-Dashboard\Logs\dashboard-$(Get-Date -Format 'yyyy-MM').log"
-    $Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    Add-Content -Path $LogFile -Value "[$Timestamp] $Mensaje"
+<#
+.SYNOPSIS
+    Limpia archivos temporales del sistema
+.DESCRIPTION
+    Script modular para limpiar archivos temporales del sistema y del usuario actual.
+    No requiere permisos de administrador.
+.NOTES
+    Parte de la arquitectura modular WPE-Dashboard
+#>
+
+# Detectar ubicación del dashboard para rutas relativas
+if (-not $Global:DashboardRoot) {
+    $Global:DashboardRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 }
+
+# Importar utilidades
+. (Join-Path $Global:DashboardRoot "Utils\Logging-Utils.ps1")
 
 function Get-FolderSize {
     param([string]$Path)
@@ -23,13 +38,7 @@ function Get-FolderSize {
 try {
     # Auto-detectar PC
     $nombrePC = $env:COMPUTERNAME
-    Write-ScriptLog "Iniciando limpieza de archivos temporales en: $nombrePC"
-    
-    # Verificar permisos admin
-    $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-    if (-not $isAdmin) {
-        throw "Este script requiere permisos de administrador"
-    }
+    Write-DashboardLog -Message "Iniciando limpieza de archivos temporales en: $nombrePC" -Level "Info" -Component "Limpiar-Archivos-Temporales"
     
     $totalLiberado = 0
     $carpetasLimpiadas = 0
@@ -69,19 +78,22 @@ try {
     Write-Host "  Vaciando papelera de reciclaje..." -ForegroundColor Gray
     Clear-RecycleBin -Force -ErrorAction SilentlyContinue
     
-    $mensaje = "Limpieza completada. Liberados: $totalLiberado MB en $carpetasLimpiadas carpetas"
-    Write-ScriptLog $mensaje
+    $mensaje = "Limpieza completada: $totalLiberado MB liberados en $carpetasLimpiadas carpetas"
+    Write-DashboardLog -Message $mensaje -Level "Info" -Component "Limpiar-Archivos-Temporales"
     
     return @{
         Success = $true
         Message = $mensaje
+        TotalLiberadoMB = $totalLiberado
+        CarpetasLimpiadas = $carpetasLimpiadas
     }
     
 } catch {
-    $errorMsg = "Error durante limpieza: $_"
-    Write-ScriptLog $errorMsg
+    $errorMsg = $_.Exception.Message
+    Write-DashboardLog -Message "Error durante limpieza: $errorMsg" -Level "Error" -Component "Limpiar-Archivos-Temporales"
+    
     return @{
         Success = $false
-        Message = $errorMsg
+        Message = "Error: $errorMsg"
     }
 }

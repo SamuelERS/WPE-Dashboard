@@ -235,7 +235,7 @@ New-UDElement -Tag 'hr' -Attributes @{style=@{'margin'=$Spacing.XL+' 0'}}
 New-UDLayout -Columns 2 -Content {
 New-UDCard -Title "CONFIGURACION INICIAL" -Content {
 New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'=$Spacing.S;'padding'=$Spacing.M}} -Content {
-# BOTON 1: Cambiar Nombre PC
+# BOTON 1: Cambiar Nombre PC (MODULAR)
 New-UDButton -Text "Cambiar Nombre del PC" -OnClick {
 Show-UDModal -Content {
 New-UDInput -Title "Cambiar Nombre del PC" -Content {
@@ -243,55 +243,33 @@ New-UDInputField -Name "nombreActualDisplay" -Placeholder $env:COMPUTERNAME -Typ
 New-UDInputField -Name "nuevoNombrePC" -Placeholder "Ejemplo: POS-Merliot, DISENO-Principal" -Type textbox
 } -Endpoint {
 param($nombreActualDisplay, $nuevoNombrePC)
+
+# Validación básica de input
 if([string]::IsNullOrWhiteSpace($nuevoNombrePC)){
 Show-UDToast -Message "Debes ingresar un nuevo nombre para el PC" -Duration 3000 -BackgroundColor $Colors.Danger
 return
 }
+
 try{
-# Verificar permisos de administrador
-$isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-if(-not $isAdmin){
-Show-UDToast -Message "Error: El dashboard debe ejecutarse como Administrador" -Duration 8000 -BackgroundColor $Colors.Danger
-return
-}
+Show-UDToast -Message "Cambiando nombre del PC..." -Duration 3000
 
-# Validar formato del nombre (reglas de Windows)
-# - 1 a 15 caracteres
-# - Solo letras, numeros y guiones
-# - NO puede empezar con guion o numero
-# - NO puede terminar con guion
-if($nuevoNombrePC.Length -lt 1 -or $nuevoNombrePC.Length -gt 15){
-Show-UDToast -Message "Nombre invalido. Debe tener entre 1 y 15 caracteres" -Duration 8000 -BackgroundColor $Colors.Danger
-return
-}
-if($nuevoNombrePC -notmatch '^[a-zA-Z][a-zA-Z0-9-]*[a-zA-Z0-9]$' -and $nuevoNombrePC -notmatch '^[a-zA-Z]$'){
-Show-UDToast -Message "Nombre invalido. Debe empezar con letra, terminar con letra/numero, y solo contener letras, numeros y guiones" -Duration 8000 -BackgroundColor $Colors.Danger
-return
-}
+# Ejecutar script modular
+$scriptPath = Join-Path $ScriptRoot "Scripts\Configuracion\Cambiar-Nombre-PC.ps1"
+$resultado = & $scriptPath -nuevoNombre $nuevoNombrePC
 
-# Verificar si el nombre es diferente
-$nombreActual = $env:COMPUTERNAME
-if($nuevoNombrePC -eq $nombreActual){
-Show-UDToast -Message "El nuevo nombre es igual al actual. No hay cambios que realizar." -Duration 5000 -BackgroundColor $Colors.Warning
-return
-}
-
-Show-UDToast -Message "Cambiando nombre del PC de '$nombreActual' a '$nuevoNombrePC'..." -Duration 3000
-
-# Cambiar el nombre del PC
-Rename-Computer -NewName $nuevoNombrePC -Force -ErrorAction Stop
-
-Write-DashboardLog -Accion "Cambiar Nombre PC" -Resultado "Exitoso: $nombreActual -> $nuevoNombrePC"
-Show-UDToast -Message "Nombre del PC cambiado exitosamente a '$nuevoNombrePC'. IMPORTANTE: Debes REINICIAR el equipo para aplicar los cambios." -Duration 15000 -BackgroundColor $Colors.Success
+if($resultado.Success){
+Show-UDToast -Message $resultado.Message -Duration 15000 -BackgroundColor $Colors.Success
 Hide-UDModal
+}else{
+Show-UDToast -Message $resultado.Message -Duration 8000 -BackgroundColor $Colors.Danger
+}
 }catch{
-Write-DashboardLog -Accion "Cambiar Nombre PC" -Resultado "Error: $_"
 Show-UDToast -Message "Error al cambiar nombre del PC: $_" -Duration 8000 -BackgroundColor $Colors.Danger
 }
 }
 }
 }
-# BOTON 2: Crear Usuario del Sistema
+# BOTON 2: Crear Usuario del Sistema (MODULAR)
 New-UDButton -Text "Crear Usuario del Sistema" -OnClick {
 Show-UDModal -Content {
 New-UDInput -Title "Crear Usuario del Sistema" -Content {
@@ -301,111 +279,35 @@ New-UDInputField -Name "tipoUsuario" -Placeholder "Selecciona tipo" -Type select
 } -Endpoint {
 param($nombreUsuario, $password, $tipoUsuario)
 
-# LOGGING DE DEBUGGING: Registrar valores recibidos del formulario
-Write-DashboardLog -Accion "Crear Usuario - DEBUG" -Resultado "Valores recibidos - nombreUsuario: [$nombreUsuario] - password: [***] - tipo: [$tipoUsuario]"
-
-# LISTA NEGRA: Nombres prohibidos que NO se pueden usar
-$nombresProhibidos = @("null", "NULL", "undefined", "UNDEFINED", "", " ", "Administrator", "Administrador", "Guest", "Invitado", "PARADISE-SYSTEMLABS")
-
-# VALIDACION ROBUSTA 1: Verificar que nombreUsuario NO sea null, vacio o whitespace
+# Validaciones básicas de input
 if([string]::IsNullOrWhiteSpace($nombreUsuario)){
-Show-UDToast -Message "ERROR: Debes ingresar un nombre de usuario valido. Ejemplo: POS-Merliot, Admin-Oficina" -Duration 5000 -BackgroundColor $Colors.Danger
-Write-DashboardLog -Accion "Crear Usuario" -Resultado "Error: nombreUsuario vacio o null"
+Show-UDToast -Message "ERROR: Debes ingresar un nombre de usuario válido" -Duration 5000 -BackgroundColor $Colors.Danger
 return
 }
 
-# VALIDACION ROBUSTA 2: Verificar que el nombre NO este en la lista negra
-if($nombresProhibidos -contains $nombreUsuario){
-Show-UDToast -Message "ERROR: El nombre '$nombreUsuario' no esta permitido. Usa un nombre valido como: POS-Merliot, Admin-Oficina, Cliente-Sala1" -Duration 8000 -BackgroundColor $Colors.Danger
-Write-DashboardLog -Accion "Crear Usuario" -Resultado "Error: nombreUsuario '$nombreUsuario' en lista negra"
-return
-}
-
-# VALIDACION ROBUSTA 3: Verificar que no contenga caracteres peligrosos
-if($nombreUsuario -match '[<>:"/\\|?*]'){
-Show-UDToast -Message "ERROR: El nombre de usuario contiene caracteres no permitidos. Usa solo letras, numeros y guiones." -Duration 5000 -BackgroundColor $Colors.Danger
-Write-DashboardLog -Accion "Crear Usuario" -Resultado "Error: nombreUsuario contiene caracteres invalidos"
-return
-}
-
-# VALIDACION PASSWORD OBLIGATORIO: No se permite crear usuarios sin password
 if([string]::IsNullOrWhiteSpace($password)){
-Show-UDToast -Message "ERROR: Debes ingresar un password para el nuevo usuario. Campo obligatorio." -Duration 5000 -BackgroundColor $Colors.Danger
-Write-DashboardLog -Accion "Crear Usuario" -Resultado "Error: Password vacio - Campo obligatorio"
+Show-UDToast -Message "ERROR: Debes ingresar un password. Campo obligatorio." -Duration 5000 -BackgroundColor $Colors.Danger
 return
 }
 
-# VALIDACION LONGITUD PASSWORD: Minimo 6 caracteres para seguridad
-if($password.Length -lt 6){
-Show-UDToast -Message "ERROR: El password debe tener al menos 6 caracteres por seguridad." -Duration 5000 -BackgroundColor $Colors.Danger
-Write-DashboardLog -Accion "Crear Usuario" -Resultado "Error: Password muy corto (menos de 6 caracteres)"
-return
+if([string]::IsNullOrWhiteSpace($tipoUsuario)){
+$tipoUsuario = "POS"
 }
 
-if([string]::IsNullOrWhiteSpace($tipoUsuario)){$tipoUsuario = "POS"}
 try{
-# Verificar permisos de administrador
-$isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-if(-not $isAdmin){
-Show-UDToast -Message "Error: El dashboard debe ejecutarse como Administrador" -Duration 8000 -BackgroundColor $Colors.Danger
-return
-}
+Show-UDToast -Message "Creando usuario $nombreUsuario..." -Duration 2000
 
-# Verificar si el usuario ya existe
-$usuarioExiste = Get-LocalUser -Name $nombreUsuario -ErrorAction SilentlyContinue
-if($usuarioExiste){
-Show-UDToast -Message "Error: El usuario $nombreUsuario ya existe. Usa otro nombre o elimina el usuario existente." -Duration 8000 -BackgroundColor $Colors.Warning
-Write-DashboardLog -Accion "Crear Usuario ($nombreUsuario)" -Resultado "Error: Usuario ya existe"
-return
-}
+# Ejecutar script modular
+$scriptPath = Join-Path $ScriptRoot "Scripts\Configuracion\Crear-Usuario-Sistema.ps1"
+$resultado = & $scriptPath -nombreUsuario $nombreUsuario -password $password -tipoUsuario $tipoUsuario
 
-Show-UDToast -Message "Creando usuario $nombreUsuario usando metodo compatible..." -Duration 2000
-
-# SOLUCION: Usar comandos NET USER (legacy) en lugar de New-LocalUser
-# Estos comandos son MAS compatibles con la pantalla de login de Windows
-
-# VALIDACION FINAL DE SEGURIDAD: Ultimo chequeo antes de crear usuario
-if([string]::IsNullOrWhiteSpace($nombreUsuario) -or $nombreUsuario -eq "null" -or $nombreUsuario -eq "undefined"){
-throw "VALIDACION FINAL FALLIDA: nombreUsuario es invalido o null. Operacion cancelada por seguridad."
-}
-
-Write-DashboardLog -Accion "Crear Usuario" -Resultado "Validacion OK - Procediendo a crear: $nombreUsuario"
-
-# PASO 1: Crear usuario con NET USER
-# CRITICO: fullname debe ser el NOMBRE DEL USUARIO para que aparezca correctamente en login
-$resultNet = & net user "$nombreUsuario" "$password" /add /fullname:"$nombreUsuario" /comment:"Tipo: $tipoUsuario - PC: $env:COMPUTERNAME" /passwordchg:no /active:yes 2>&1
-
-if($LASTEXITCODE -ne 0){
-throw "Error al crear usuario: $resultNet"
-}
-
-# PASO 2: Configurar que el password no expire
-# Metodo compatible con Windows 10/11 (sin wmic)
-Start-Sleep -Milliseconds 500
-Set-LocalUser -Name $nombreUsuario -PasswordNeverExpires $true -ErrorAction SilentlyContinue
-
-# PASO 3: Agregar al grupo Users
-Start-Sleep -Milliseconds 500
-& net localgroup Users "$nombreUsuario" /add 2>&1 | Out-Null
-
-# PASO 4: Asegurar que NO este en la lista de usuarios ocultos del registro
-try {
-$registroSpecialAccounts = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList"
-if(Test-Path $registroSpecialAccounts){
-# Eliminar la entrada si existe (para que sea visible)
-Remove-ItemProperty -Path $registroSpecialAccounts -Name $nombreUsuario -ErrorAction SilentlyContinue
-}
-} catch {}
-
-# PASO 5: Forzar actualizacion del sistema de usuarios
-Start-Sleep -Milliseconds 500
-gpupdate /force 2>&1 | Out-Null
-
-Write-DashboardLog -Accion "Crear Usuario ($nombreUsuario)" -Resultado "Exitoso - PC: $env:COMPUTERNAME - Usuario configurado para login"
-Show-UDToast -Message "Usuario $nombreUsuario creado exitosamente. Password: $password. IMPORTANTE: Cierra sesion o reinicia para ver el usuario en la pantalla de login." -Duration 12000 -BackgroundColor $Colors.Success
+if($resultado.Success){
+Show-UDToast -Message $resultado.Message -Duration 12000 -BackgroundColor $Colors.Success
 Hide-UDModal
+}else{
+Show-UDToast -Message $resultado.Message -Duration 8000 -BackgroundColor $Colors.Danger
+}
 }catch{
-Write-DashboardLog -Accion "Crear Usuario ($nombreUsuario)" -Resultado "Error: $_"
 Show-UDToast -Message "Error al crear usuario: $_" -Duration 8000 -BackgroundColor $Colors.Danger
 }
 }
@@ -555,7 +457,7 @@ Write-DashboardLog -Accion "Reparar Usuarios" -Resultado "Error: $_"
 Show-UDToast -Message "Error al reparar usuarios: $_" -Duration 8000 -BackgroundColor $Colors.Danger
 }
 }
-# BOTON 6: Eliminar Usuarios (MOVIDO del closure de Reparar Usuarios)
+# BOTON 6: Eliminar Usuarios (MODULAR)
 New-UDButton -Text "Eliminar Usuarios" -OnClick {
 Show-UDModal -Content {
 New-UDInput -Title "Eliminar Usuario del Sistema" -Content {
@@ -563,52 +465,26 @@ New-UDInputField -Name "nombreUsuarioEliminar" -Placeholder "Nombre exacto del u
 } -Endpoint {
 param($nombreUsuarioEliminar)
 
+# Validación básica de input
 if([string]::IsNullOrWhiteSpace($nombreUsuarioEliminar)){
 Show-UDToast -Message "Debes ingresar el nombre del usuario a eliminar" -Duration 3000 -BackgroundColor $Colors.Danger
 return
 }
 
-# Proteger usuarios criticos del sistema
-$usuariosProtegidos = @("Administrator", "Administrador", "DefaultAccount", "Guest", "Invitado", "WDAGUtilityAccount", "Paradise-SystemLabs", "Test7-POS")
-
-if($usuariosProtegidos -contains $nombreUsuarioEliminar){
-Show-UDToast -Message "Error: No se puede eliminar el usuario $nombreUsuarioEliminar (usuario protegido)" -Duration 8000 -BackgroundColor $Colors.Danger
-return
-}
-
 try {
-# Verificar si el usuario existe
-$usuarioExiste = Get-LocalUser -Name $nombreUsuarioEliminar -ErrorAction SilentlyContinue
-if(-not $usuarioExiste){
-Show-UDToast -Message "Error: El usuario $nombreUsuarioEliminar no existe" -Duration 5000 -BackgroundColor $Colors.Warning
-return
-}
-
 Show-UDToast -Message "Eliminando usuario $nombreUsuarioEliminar..." -Duration 3000
 
-# Eliminar usuario usando Remove-LocalUser
-Remove-LocalUser -Name $nombreUsuarioEliminar -ErrorAction Stop
+# Ejecutar script modular
+$scriptPath = Join-Path $ScriptRoot "Scripts\Mantenimiento\Eliminar-Usuario.ps1"
+$resultado = & $scriptPath -nombreUsuario $nombreUsuarioEliminar
 
-# Eliminar carpeta de perfil si existe
-$perfilPath = "C:\Users\$nombreUsuarioEliminar"
-if(Test-Path $perfilPath){
-Start-Sleep -Seconds 1
-Remove-Item -Path $perfilPath -Recurse -Force -ErrorAction SilentlyContinue
-}
-
-# Limpiar del registro de usuarios ocultos
-try {
-$registroSpecialAccounts = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList"
-if(Test-Path $registroSpecialAccounts){
-Remove-ItemProperty -Path $registroSpecialAccounts -Name $nombreUsuarioEliminar -ErrorAction SilentlyContinue
-}
-} catch {}
-
-Write-DashboardLog -Accion "Eliminar Usuario ($nombreUsuarioEliminar)" -Resultado "Exitoso - PC: $env:COMPUTERNAME"
-Show-UDToast -Message "Usuario $nombreUsuarioEliminar eliminado exitosamente" -Duration 8000 -BackgroundColor $Colors.Success
+if($resultado.Success){
+Show-UDToast -Message $resultado.Message -Duration 8000 -BackgroundColor $Colors.Success
 Hide-UDModal
+}else{
+Show-UDToast -Message $resultado.Message -Duration 8000 -BackgroundColor $Colors.Danger
+}
 } catch {
-Write-DashboardLog -Accion "Eliminar Usuario ($nombreUsuarioEliminar)" -Resultado "Error: $_"
 Show-UDToast -Message "Error al eliminar usuario: $_" -Duration 8000 -BackgroundColor $Colors.Danger
 }
 }
@@ -714,7 +590,20 @@ New-UDButton -Text "Configurar Email Corporativo" -OnClick {Show-UDToast -Messag
 New-UDCard -Title "MANTENIMIENTO GENERAL" -Content {
 New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'=$Spacing.S;'padding'=$Spacing.M}} -Content {
 New-UDButton -Text "Windows Update" -OnClick {Show-UDToast -Message "Verificando actualizaciones..." -Duration 2000;Write-DashboardLog -Accion "Windows Update" -Resultado "Iniciado"}
-New-UDButton -Text "Limpieza de Disco" -OnClick {Show-UDToast -Message "Limpiando disco..." -Duration 2000;Write-DashboardLog -Accion "Limpieza Disco" -Resultado "Iniciado"}
+New-UDButton -Text "Limpieza de Disco" -OnClick {
+try{
+Show-UDToast -Message "Limpiando archivos temporales..." -Duration 2000
+$scriptPath = Join-Path $ScriptRoot "Scripts\Mantenimiento\Limpiar-Archivos-Temporales.ps1"
+$resultado = & $scriptPath
+if($resultado.Success){
+Show-UDToast -Message $resultado.Message -Duration 5000 -BackgroundColor $Colors.Success
+}else{
+Show-UDToast -Message $resultado.Message -Duration 5000 -BackgroundColor $Colors.Danger
+}
+}catch{
+Show-UDToast -Message "Error: $_" -Duration 5000 -BackgroundColor $Colors.Danger
+}
+}
 New-UDButton -Text "Verificar Sistema" -Style @{'background-color'=$Colors.Success;'color'='white'} -OnClick {Show-UDToast -Message "Verificando..." -Duration 2000;Write-DashboardLog -Accion "Verificar Sistema" -Resultado "Iniciado"}
 New-UDButton -Text "Optimizar Rendimiento" -OnClick {Show-UDToast -Message "Optimizando..." -Duration 2000;Write-DashboardLog -Accion "Optimizar" -Resultado "Iniciado"} -Style @{'background-color'=$Colors.Success;'color'='white'}
 }

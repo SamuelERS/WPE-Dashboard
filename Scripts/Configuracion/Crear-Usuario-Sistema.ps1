@@ -1,54 +1,88 @@
+# ============================================
+# CREAR USUARIO DEL SISTEMA
+# ============================================
 # @Name: Crear Usuario del Sistema
-# @Description: Crea un nuevo usuario local de Windows con configuración automática
+# @Description: Crea un nuevo usuario local de Windows con permisos de administrador
+# @Category: Configuracion
 # @RequiresAdmin: true
 # @HasForm: true
 # @FormField: nombreUsuario|Ejemplo: POS-Merliot|textbox
-# @FormField: password|Password (defecto: 841357)|password
+# @FormField: password|Password (obligatorio)|password
 # @FormField: tipoUsuario|Tipo de usuario|select:POS,Admin,Diseno,Cliente,Mantenimiento
 
+<#
+.SYNOPSIS
+    Crea un usuario local del sistema
+.DESCRIPTION
+    Script modular para crear usuarios locales de Windows con validaciones robustas.
+    Agrega el usuario al grupo Administradores.
+.NOTES
+    Requiere permisos de administrador
+    Parte de la arquitectura modular WPE-Dashboard
+#>
+
 param(
+    [Parameter(Mandatory=$true)]
     [string]$nombreUsuario,
+    
+    [Parameter(Mandatory=$true)]
     [string]$password,
-    [string]$tipoUsuario
+    
+    [Parameter(Mandatory=$false)]
+    [string]$tipoUsuario = "POS"
 )
 
-function Write-ScriptLog {
-    param([string]$Mensaje)
-    $LogFile = "C:\WPE-Dashboard\Logs\dashboard-$(Get-Date -Format 'yyyy-MM').log"
-    $Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    Add-Content -Path $LogFile -Value "[$Timestamp] $Mensaje"
+# Detectar ubicación del dashboard para rutas relativas
+if (-not $Global:DashboardRoot) {
+    $Global:DashboardRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 }
 
+# Importar utilidades
+. (Join-Path $Global:DashboardRoot "Utils\Validation-Utils.ps1")
+. (Join-Path $Global:DashboardRoot "Utils\Logging-Utils.ps1")
+. (Join-Path $Global:DashboardRoot "Utils\Security-Utils.ps1")
+
 try {
-    # Validaciones
+    # Verificar permisos de administrador primero
+    Assert-AdminPrivileges
+    
+    # Validar que se proporcionó nombre de usuario
     if ([string]::IsNullOrWhiteSpace($nombreUsuario)) {
-        throw "Debes ingresar un nombre de usuario"
+        throw "Debes ingresar un nombre de usuario válido"
     }
     
-    # Valores por defecto
+    # Sanitizar input
+    $nombreUsuario = Sanitize-Input -Input $nombreUsuario
+    
+    # Validar nombre de usuario usando utilidad
+    if (-not (Test-ValidUsername -Username $nombreUsuario)) {
+        throw "Nombre de usuario inválido. Debe tener 3-20 caracteres alfanuméricos, guiones o guiones bajos."
+    }
+    
+    # Validar password (obligatorio)
     if ([string]::IsNullOrWhiteSpace($password)) {
-        $password = "841357"
+        throw "Debes ingresar un password para el nuevo usuario. Campo obligatorio."
     }
     
+    # Validar longitud de password
+    if (-not (Test-ValidPassword -Password $password -MinLength 6)) {
+        throw "El password debe tener al menos 6 caracteres por seguridad."
+    }
+    
+    # Valor por defecto para tipo de usuario
     if ([string]::IsNullOrWhiteSpace($tipoUsuario)) {
         $tipoUsuario = "POS"
-    }
-    
-    # Verificar permisos admin
-    $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-    if (-not $isAdmin) {
-        throw "El dashboard debe ejecutarse como Administrador"
     }
     
     # Verificar si el usuario ya existe
     $usuarioExiste = Get-LocalUser -Name $nombreUsuario -ErrorAction SilentlyContinue
     if ($usuarioExiste) {
-        throw "El usuario $nombreUsuario ya existe. Usa otro nombre o elimina el usuario existente primero."
+        throw "El usuario '$nombreUsuario' ya existe. Usa otro nombre o elimina el usuario existente primero."
     }
     
     # Auto-detectar PC
     $nombrePC = $env:COMPUTERNAME
-    Write-ScriptLog "Creando usuario $nombreUsuario en PC: $nombrePC"
+    Write-DashboardLog -Message "Creando usuario '$nombreUsuario' en PC: $nombrePC" -Level "Info" -Component "Crear-Usuario-Sistema"
     
     # Crear usuario
     $securePass = ConvertTo-SecureString $password -AsPlainText -Force
@@ -60,20 +94,24 @@ try {
                   -UserMayNotChangePassword `
                   -ErrorAction Stop | Out-Null
     
-    # Agregar a grupo Users
-    Add-LocalGroupMember -Group "Users" -Member $nombreUsuario -ErrorAction Stop
+    # Agregar a grupo Administradores
+    Add-LocalGroupMember -Group "Administradores" -Member $nombreUsuario -ErrorAction Stop
     
-    Write-ScriptLog "Usuario $nombreUsuario creado exitosamente en PC: $nombrePC"
+    Write-DashboardLog -Message "Usuario '$nombreUsuario' creado exitosamente en PC: $nombrePC" -Level "Info" -Component "Crear-Usuario-Sistema"
     
     return @{
         Success = $true
-        Message = "Usuario $nombreUsuario creado exitosamente. Password: $password"
+        Message = "Usuario '$nombreUsuario' creado exitosamente y agregado al grupo Administradores."
+        Username = $nombreUsuario
+        PC = $nombrePC
     }
     
 } catch {
-    Write-ScriptLog "Error al crear usuario: $_"
+    $errorMsg = $_.Exception.Message
+    Write-DashboardLog -Message "Error al crear usuario: $errorMsg" -Level "Error" -Component "Crear-Usuario-Sistema"
+    
     return @{
         Success = $false
-        Message = "Error: $_"
+        Message = "Error: $errorMsg"
     }
 }
