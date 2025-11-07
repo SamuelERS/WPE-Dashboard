@@ -44,3 +44,11 @@ $RECYCLE.BIN/
 *.pfx
 config.local.ps1
 secrets.ps1
+
+# Nombres reservados de Windows (prevenir conflictos)
+NUL
+CON
+PRN
+AUX
+COM[1-9]
+LPT[1-9]
