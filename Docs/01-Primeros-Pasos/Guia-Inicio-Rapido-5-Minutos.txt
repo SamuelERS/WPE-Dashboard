@@ -1,0 +1,89 @@
+================================================================================
+  DASHBOARD IT - PARADISE-SYSTEMLABS
+  Guía de Inicio Rápido
+================================================================================
+
+🚀 INICIAR EL DASHBOARD
+--------------------------------------------------------------------------------
+1. Doble clic en: Iniciar-Dashboard.bat
+2. Aceptar permisos de administrador (UAC)
+3. Esperar mensaje: "Dashboard iniciado en puerto 10000"
+4. Abrir navegador en: http://localhost:10000
+
+📱 ACCESO DESDE OTRAS COMPUTADORAS
+--------------------------------------------------------------------------------
+Desde cualquier PC en la red local:
+http://[IP-DEL-SERVIDOR]:10000
+
+Ejemplo: http://192.168.1.100:10000
+
+Para saber tu IP:
+- Abrir PowerShell
+- Ejecutar: ipconfig
+- Buscar "IPv4 Address"
+
+🛑 DETENER EL DASHBOARD
+--------------------------------------------------------------------------------
+Opción 1: Cerrar la ventana de PowerShell
+Opción 2: Ejecutar: Detener-Dashboard.ps1
+
+📝 AGREGAR NUEVOS SCRIPTS
+--------------------------------------------------------------------------------
+1. Copiar: Scripts\PLANTILLA-Script.ps1
+2. Renombrar y mover a carpeta de categoría
+3. Editar metadata (@Name, @Description, etc.)
+4. Implementar lógica del script
+5. Ver guía completa en: GUIA-AGREGAR-SCRIPTS.md
+
+📊 VER LOGS
+--------------------------------------------------------------------------------
+Desde el dashboard:
+- Ir a: Historial y Auditoría
+- Clic en: Ver Logs
+
+Desde archivos:
+- Carpeta: C:\WPE-Dashboard\Logs\
+- Archivo: dashboard-YYYY-MM.log
+
+🔧 SOLUCIÓN DE PROBLEMAS
+--------------------------------------------------------------------------------
+❌ Puerto bloqueado
+   → El dashboard ahora lo resuelve automáticamente
+
+❌ Acceso denegado
+   → Ejecutar Iniciar-Dashboard.bat (pide permisos admin)
+
+❌ No accesible desde red
+   → Verificar firewall Windows
+   → Permitir puerto 10000 entrante
+
+❌ Scripts no funcionan
+   → Verificar que el dashboard se ejecutó como admin
+   → Revisar logs en: Logs\dashboard-YYYY-MM.log
+
+📚 DOCUMENTACIÓN COMPLETA
+--------------------------------------------------------------------------------
+README.md                  - Información general del proyecto
+GUIA-AGREGAR-SCRIPTS.md   - Cómo migrar tus scripts de Notion
+PROGRESO.md               - Estado actual y próximos pasos
+PLANTILLA-Script.ps1      - Template para nuevos scripts
+
+🎯 CATEGORÍAS DISPONIBLES
+--------------------------------------------------------------------------------
+1. Configuración Inicial    - Setup de equipos nuevos
+2. Mantenimiento General    - Updates, limpieza, optimización
+3. Punto de Venta (POS)     - Todo relacionado con POS
+4. Diseño Gráfico           - Adobe, calibración, impresoras
+5. Atención al Cliente      - CRM, softphones, estaciones
+6. Historial y Auditoría    - Logs, reportes, auditoría
+
+📞 SOPORTE
+--------------------------------------------------------------------------------
+Para dudas o problemas:
+1. Revisar README.md
+2. Ver GUIA-AGREGAR-SCRIPTS.md
+3. Consultar scripts de ejemplo en Scripts\
+
+================================================================================
+Dashboard IT v1.1 | Paradise-SystemLabs | Noviembre 2025
+================================================================================
