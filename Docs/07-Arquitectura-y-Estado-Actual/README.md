@@ -53,7 +53,7 @@ Esta carpeta contiene la **auditoría técnica completa** del proyecto WPE-Dashb
   - Métricas del proyecto
   - Problemas identificados (críticos, importantes, menores)
   - Oportunidades de mejora
-  - Conclusiones técnicas
+  - Conclusiones técnicas.
 
 #### 02-MAPA-DEPENDENCIAS-Y-COMPONENTES.md
 - **Tiempo de lectura:** 25 minutos
