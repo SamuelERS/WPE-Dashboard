@@ -38,11 +38,13 @@ function Write-DashboardLog {
     )
     
     try {
-        # Usar DashboardRoot si está definido, sino usar ruta relativa
+        # Usar DashboardRoot si está definido, sino detectar automáticamente
         if ($Global:DashboardRoot) {
             $logFile = Join-Path $Global:DashboardRoot "Logs\dashboard-$(Get-Date -Format 'yyyy-MM').log"
         } else {
-            $logFile = "C:\ProgramData\WPE-Dashboard\Logs\dashboard-$(Get-Date -Format 'yyyy-MM').log"
+            # Fallback: detectar ubicación desde el script actual
+            $Global:DashboardRoot = Split-Path -Parent $PSScriptRoot
+            $logFile = Join-Path $Global:DashboardRoot "Logs\dashboard-$(Get-Date -Format 'yyyy-MM').log"
         }
         
         # Crear carpeta Logs si no existe
@@ -94,11 +96,12 @@ function Get-RecentLogs {
     )
     
     try {
-        # Usar DashboardRoot si está definido
+        # Usar DashboardRoot si está definido, sino detectar automáticamente
         if ($Global:DashboardRoot) {
             $logFile = Join-Path $Global:DashboardRoot "Logs\dashboard-$(Get-Date -Format 'yyyy-MM').log"
         } else {
-            $logFile = "C:\ProgramData\WPE-Dashboard\Logs\dashboard-$(Get-Date -Format 'yyyy-MM').log"
+            $Global:DashboardRoot = Split-Path -Parent $PSScriptRoot
+            $logFile = Join-Path $Global:DashboardRoot "Logs\dashboard-$(Get-Date -Format 'yyyy-MM').log"
         }
         
         if (-not (Test-Path $logFile)) {
@@ -136,11 +139,12 @@ function Clear-OldLogs {
     )
     
     try {
-        # Usar DashboardRoot si está definido
+        # Usar DashboardRoot si está definido, sino detectar automáticamente
         if ($Global:DashboardRoot) {
             $logsPath = Join-Path $Global:DashboardRoot "Logs"
         } else {
-            $logsPath = "C:\ProgramData\WPE-Dashboard\Logs"
+            $Global:DashboardRoot = Split-Path -Parent $PSScriptRoot
+            $logsPath = Join-Path $Global:DashboardRoot "Logs"
         }
         
         if (-not (Test-Path $logsPath)) {
@@ -188,11 +192,12 @@ function Get-LogStatistics {
         Write-Host "Total de logs: $($stats.TotalLogs)"
     #>
     try {
-        # Usar DashboardRoot si está definido
+        # Usar DashboardRoot si está definido, sino detectar automáticamente
         if ($Global:DashboardRoot) {
             $logsPath = Join-Path $Global:DashboardRoot "Logs"
         } else {
-            $logsPath = "C:\ProgramData\WPE-Dashboard\Logs"
+            $Global:DashboardRoot = Split-Path -Parent $PSScriptRoot
+            $logsPath = Join-Path $Global:DashboardRoot "Logs"
         }
         
         if (-not (Test-Path $logsPath)) {

@@ -28,6 +28,22 @@
   "ui": {
     "showWelcomeMessage": true,
     "showSystemInfo": true,
-    "refreshInterval": 30
+    "refreshInterval": 30,
+    "colors": {
+      "primary": "#2196F3",
+      "success": "#4caf50",
+      "warning": "#ff9800",
+      "danger": "#dc3545",
+      "info": "#17a2b8",
+      "dark": "#343a40",
+      "light": "#f8f9fa"
+    },
+    "spacing": {
+      "xs": "10px",
+      "s": "12px",
+      "m": "16px",
+      "l": "20px",
+      "xl": "24px"
+    }
   }
 }

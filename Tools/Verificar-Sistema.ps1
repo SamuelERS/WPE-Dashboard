@@ -3,10 +3,16 @@
 # ============================================
 # Script para verificar que todo está correctamente configurado
 
+# Detectar ubicación del dashboard para rutas relativas
+if (-not $Global:DashboardRoot) {
+    $Global:DashboardRoot = Split-Path -Parent $PSScriptRoot
+}
+
 Write-Host ""
 Write-Host "============================================" -ForegroundColor Cyan
 Write-Host "  VERIFICACION DEL SISTEMA - DASHBOARD IT" -ForegroundColor Cyan
 Write-Host "============================================" -ForegroundColor Cyan
+Write-Host "Ubicación: $Global:DashboardRoot" -ForegroundColor Gray
 Write-Host ""
 
 $errores = 0
@@ -60,20 +66,20 @@ Write-Host "3. VERIFICANDO ESTRUCTURA DE CARPETAS" -ForegroundColor White
 Write-Host "─────────────────────────────────────────" -ForegroundColor Gray
 
 $carpetas = @(
-    "C:\WPE-Dashboard\Scripts",
-    "C:\WPE-Dashboard\Scripts\Configuracion",
-    "C:\WPE-Dashboard\Scripts\Mantenimiento",
-    "C:\WPE-Dashboard\Scripts\POS",
-    "C:\WPE-Dashboard\Scripts\Diseno",
-    "C:\WPE-Dashboard\Scripts\Atencion-Al-Cliente",
-    "C:\WPE-Dashboard\Scripts\Auditoria",
-    "C:\WPE-Dashboard\Logs"
+    "Scripts",
+    "Scripts\Configuracion",
+    "Scripts\Mantenimiento",
+    "Scripts\POS",
+    "Scripts\Diseno",
+    "Scripts\Atencion-Al-Cliente",
+    "Scripts\Auditoria",
+    "Logs"
 )
 
 foreach ($carpeta in $carpetas) {
-    $existe = Test-Path $carpeta
-    $nombre = $carpeta -replace "C:\\WPE-Dashboard\\", ""
-    Show-Check $nombre $existe "Crear carpeta: $carpeta" "Warning"
+    $rutaCompleta = Join-Path $Global:DashboardRoot $carpeta
+    $existe = Test-Path $rutaCompleta
+    Show-Check $carpeta $existe "Crear carpeta: $rutaCompleta" "Warning"
 }
 
 Write-Host ""
@@ -81,20 +87,21 @@ Write-Host "4. VERIFICANDO ARCHIVOS PRINCIPALES" -ForegroundColor White
 Write-Host "─────────────────────────────────────────" -ForegroundColor Gray
 
 $archivos = @(
-    "C:\WPE-Dashboard\Dashboard.ps1",
-    "C:\WPE-Dashboard\Iniciar-Dashboard.bat",
-    "C:\WPE-Dashboard\README.md",
-    "C:\WPE-Dashboard\.gitignore",
-    "C:\WPE-Dashboard\Scripts\PLANTILLA-Script.ps1",
-    "C:\WPE-Dashboard\Scripts\ScriptLoader.ps1",
-    "C:\WPE-Dashboard\Docs\GUIA-AGREGAR-SCRIPTS.md",
-    "C:\WPE-Dashboard\Docs\REGLAS-DE-LA-CASA.md"
+    "Dashboard.ps1",
+    "Iniciar-Dashboard.bat",
+    "README.md",
+    ".gitignore",
+    "Scripts\PLANTILLA-Script.ps1",
+    "Scripts\ScriptLoader.ps1",
+    "Docs\GUIA-AGREGAR-SCRIPTS.md",
+    "Docs\REGLAS-DE-LA-CASA.md"
 )
 
 foreach ($archivo in $archivos) {
-    $existe = Test-Path $archivo
+    $rutaCompleta = Join-Path $Global:DashboardRoot $archivo
+    $existe = Test-Path $rutaCompleta
     $nombre = Split-Path $archivo -Leaf
-    Show-Check $nombre $existe "Archivo faltante: $archivo"
+    Show-Check $nombre $existe "Archivo faltante: $rutaCompleta"
 }
 
 Write-Host ""
