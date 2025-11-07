@@ -199,7 +199,7 @@ function Write-DashboardLog {
 
 # Variables de Diseno
 $Colors = @{Primary = "#2196F3"; Success = "#4caf50"; Warning = "#ff9800"; Danger = "#dc3545"}
-$Spacing = @{M = "12px"; L = "16px"}
+$Spacing = @{XS = "10px"; S = "12px"; M = "16px"; L = "20px"; XL = "24px"}
 
 Write-Host "`n============================================" -ForegroundColor Cyan
 Write-Host "  DASHBOARD INICIANDO" -ForegroundColor Green
@@ -231,10 +231,10 @@ New-UDCard -Title "INFORMACION DEL SISTEMA" -Content {
     }
 }
 
-New-UDElement -Tag 'hr' -Attributes @{style=@{'margin'='24px 0'}}
+New-UDElement -Tag 'hr' -Attributes @{style=@{'margin'=$Spacing.XL+' 0'}}
 New-UDLayout -Columns 2 -Content {
 New-UDCard -Title "CONFIGURACION INICIAL" -Content {
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'='12px';'padding'='16px'}} -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'=$Spacing.S;'padding'=$Spacing.M}} -Content {
 # BOTON 1: Cambiar Nombre PC
 New-UDButton -Text "Cambiar Nombre del PC" -OnClick {
 Show-UDModal -Content {
@@ -244,14 +244,14 @@ New-UDInputField -Name "nuevoNombrePC" -Placeholder "Ejemplo: POS-Merliot, DISEN
 } -Endpoint {
 param($nombreActualDisplay, $nuevoNombrePC)
 if([string]::IsNullOrWhiteSpace($nuevoNombrePC)){
-Show-UDToast -Message "Debes ingresar un nuevo nombre para el PC" -Duration 3000 -BackgroundColor "#f44336"
+Show-UDToast -Message "Debes ingresar un nuevo nombre para el PC" -Duration 3000 -BackgroundColor $Colors.Danger
 return
 }
 try{
 # Verificar permisos de administrador
 $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if(-not $isAdmin){
-Show-UDToast -Message "Error: El dashboard debe ejecutarse como Administrador" -Duration 8000 -BackgroundColor "#f44336"
+Show-UDToast -Message "Error: El dashboard debe ejecutarse como Administrador" -Duration 8000 -BackgroundColor $Colors.Danger
 return
 }
 
@@ -261,18 +261,18 @@ return
 # - NO puede empezar con guion o numero
 # - NO puede terminar con guion
 if($nuevoNombrePC.Length -lt 1 -or $nuevoNombrePC.Length -gt 15){
-Show-UDToast -Message "Nombre invalido. Debe tener entre 1 y 15 caracteres" -Duration 8000 -BackgroundColor "#f44336"
+Show-UDToast -Message "Nombre invalido. Debe tener entre 1 y 15 caracteres" -Duration 8000 -BackgroundColor $Colors.Danger
 return
 }
 if($nuevoNombrePC -notmatch '^[a-zA-Z][a-zA-Z0-9-]*[a-zA-Z0-9]$' -and $nuevoNombrePC -notmatch '^[a-zA-Z]$'){
-Show-UDToast -Message "Nombre invalido. Debe empezar con letra, terminar con letra/numero, y solo contener letras, numeros y guiones" -Duration 8000 -BackgroundColor "#f44336"
+Show-UDToast -Message "Nombre invalido. Debe empezar con letra, terminar con letra/numero, y solo contener letras, numeros y guiones" -Duration 8000 -BackgroundColor $Colors.Danger
 return
 }
 
 # Verificar si el nombre es diferente
 $nombreActual = $env:COMPUTERNAME
 if($nuevoNombrePC -eq $nombreActual){
-Show-UDToast -Message "El nuevo nombre es igual al actual. No hay cambios que realizar." -Duration 5000 -BackgroundColor "#ff9800"
+Show-UDToast -Message "El nuevo nombre es igual al actual. No hay cambios que realizar." -Duration 5000 -BackgroundColor $Colors.Warning
 return
 }
 
@@ -282,52 +282,16 @@ Show-UDToast -Message "Cambiando nombre del PC de '$nombreActual' a '$nuevoNombr
 Rename-Computer -NewName $nuevoNombrePC -Force -ErrorAction Stop
 
 Write-DashboardLog -Accion "Cambiar Nombre PC" -Resultado "Exitoso: $nombreActual -> $nuevoNombrePC"
-Show-UDToast -Message "Nombre del PC cambiado exitosamente a '$nuevoNombrePC'. IMPORTANTE: Debes REINICIAR el equipo para aplicar los cambios." -Duration 15000 -BackgroundColor "#4caf50"
+Show-UDToast -Message "Nombre del PC cambiado exitosamente a '$nuevoNombrePC'. IMPORTANTE: Debes REINICIAR el equipo para aplicar los cambios." -Duration 15000 -BackgroundColor $Colors.Success
 Hide-UDModal
 }catch{
 Write-DashboardLog -Accion "Cambiar Nombre PC" -Resultado "Error: $_"
-Show-UDToast -Message "Error al cambiar nombre del PC: $_" -Duration 8000 -BackgroundColor "#f44336"
+Show-UDToast -Message "Error al cambiar nombre del PC: $_" -Duration 8000 -BackgroundColor $Colors.Danger
 }
 }
 }
 }
-# BOTON 2: Reiniciar PC (Boton rojo de advertencia CON CONFIRMACION)
-New-UDButton -Text "REINICIAR PC" -OnClick {
-Show-UDModal -Content {
-New-UDHeading -Text "CONFIRMACION DE REINICIO" -Size 4 -Color "#dc3545"
-
-New-UDElement -Tag 'div' -Attributes @{style=@{'padding'='20px';'background-color'='#fff3cd';'border'='2px solid #ff9800';'border-radius'='5px';'margin'='20px 0'}} -Content {
-New-UDElement -Tag 'p' -Attributes @{style=@{'font-size'='16px';'font-weight'='bold';'color'='#dc3545';'margin-bottom'='10px'}} -Content {"ADVERTENCIA CRITICA"}
-New-UDElement -Tag 'p' -Content {"Estas a punto de REINICIAR el equipo:"}
-New-UDElement -Tag 'p' -Attributes @{style=@{'font-weight'='bold';'color'='#000'}} -Content {"PC: $env:COMPUTERNAME"}
-New-UDElement -Tag 'hr'
-New-UDElement -Tag 'p' -Content {"Esto causara:"}
-New-UDElement -Tag 'ul' -Content {
-New-UDElement -Tag 'li' -Content {"Cierre de todas las aplicaciones abiertas"}
-New-UDElement -Tag 'li' -Content {"Posible perdida de trabajo no guardado"}
-New-UDElement -Tag 'li' -Content {"Desconexion de todos los usuarios del equipo"}
-New-UDElement -Tag 'li' -Content {"Detencion del dashboard"}
-}
-}
-
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='12px';'justify-content'='center';'margin-top'='20px'}} -Content {
-New-UDButton -Text "SI, REINICIAR AHORA" -OnClick {
-Show-UDToast -Message "Confirmado. Reiniciando el equipo en 10 segundos..." -Duration 10000 -BackgroundColor "#ff9800"
-Write-DashboardLog -Accion "Reiniciar PC" -Resultado "Confirmado - Usuario: $env:USERNAME - PC: $env:COMPUTERNAME"
-Hide-UDModal
-Start-Sleep -Seconds 3
-Restart-Computer -Force
-} -Style @{'background-color'='#dc3545';'color'='white';'font-weight'='bold';'padding'='12px 24px'}
-
-New-UDButton -Text "CANCELAR" -OnClick {
-Show-UDToast -Message "Reinicio cancelado" -Duration 3000 -BackgroundColor "#4caf50"
-Write-DashboardLog -Accion "Reiniciar PC" -Resultado "Cancelado por usuario"
-Hide-UDModal
-} -Style @{'background-color'='#6c757d';'color'='white';'padding'='12px 24px'}
-}
-} -Header {New-UDHeading -Text "Confirmar Reinicio del Sistema" -Size 5} -MaxWidth 'md' -Persistent
-} -Style @{'background-color'='#dc3545';'color'='white'}
-# BOTON 3: Crear Usuario del Sistema
+# BOTON 2: Crear Usuario del Sistema
 New-UDButton -Text "Crear Usuario del Sistema" -OnClick {
 Show-UDModal -Content {
 New-UDInput -Title "Crear Usuario del Sistema" -Content {
@@ -345,35 +309,35 @@ $nombresProhibidos = @("null", "NULL", "undefined", "UNDEFINED", "", " ", "Admin
 
 # VALIDACION ROBUSTA 1: Verificar que nombreUsuario NO sea null, vacio o whitespace
 if([string]::IsNullOrWhiteSpace($nombreUsuario)){
-Show-UDToast -Message "ERROR: Debes ingresar un nombre de usuario valido. Ejemplo: POS-Merliot, Admin-Oficina" -Duration 5000 -BackgroundColor "#f44336"
+Show-UDToast -Message "ERROR: Debes ingresar un nombre de usuario valido. Ejemplo: POS-Merliot, Admin-Oficina" -Duration 5000 -BackgroundColor $Colors.Danger
 Write-DashboardLog -Accion "Crear Usuario" -Resultado "Error: nombreUsuario vacio o null"
 return
 }
 
 # VALIDACION ROBUSTA 2: Verificar que el nombre NO este en la lista negra
 if($nombresProhibidos -contains $nombreUsuario){
-Show-UDToast -Message "ERROR: El nombre '$nombreUsuario' no esta permitido. Usa un nombre valido como: POS-Merliot, Admin-Oficina, Cliente-Sala1" -Duration 8000 -BackgroundColor "#f44336"
+Show-UDToast -Message "ERROR: El nombre '$nombreUsuario' no esta permitido. Usa un nombre valido como: POS-Merliot, Admin-Oficina, Cliente-Sala1" -Duration 8000 -BackgroundColor $Colors.Danger
 Write-DashboardLog -Accion "Crear Usuario" -Resultado "Error: nombreUsuario '$nombreUsuario' en lista negra"
 return
 }
 
 # VALIDACION ROBUSTA 3: Verificar que no contenga caracteres peligrosos
 if($nombreUsuario -match '[<>:"/\\|?*]'){
-Show-UDToast -Message "ERROR: El nombre de usuario contiene caracteres no permitidos. Usa solo letras, numeros y guiones." -Duration 5000 -BackgroundColor "#f44336"
+Show-UDToast -Message "ERROR: El nombre de usuario contiene caracteres no permitidos. Usa solo letras, numeros y guiones." -Duration 5000 -BackgroundColor $Colors.Danger
 Write-DashboardLog -Accion "Crear Usuario" -Resultado "Error: nombreUsuario contiene caracteres invalidos"
 return
 }
 
 # VALIDACION PASSWORD OBLIGATORIO: No se permite crear usuarios sin password
 if([string]::IsNullOrWhiteSpace($password)){
-Show-UDToast -Message "ERROR: Debes ingresar un password para el nuevo usuario. Campo obligatorio." -Duration 5000 -BackgroundColor "#f44336"
+Show-UDToast -Message "ERROR: Debes ingresar un password para el nuevo usuario. Campo obligatorio." -Duration 5000 -BackgroundColor $Colors.Danger
 Write-DashboardLog -Accion "Crear Usuario" -Resultado "Error: Password vacio - Campo obligatorio"
 return
 }
 
 # VALIDACION LONGITUD PASSWORD: Minimo 6 caracteres para seguridad
 if($password.Length -lt 6){
-Show-UDToast -Message "ERROR: El password debe tener al menos 6 caracteres por seguridad." -Duration 5000 -BackgroundColor "#f44336"
+Show-UDToast -Message "ERROR: El password debe tener al menos 6 caracteres por seguridad." -Duration 5000 -BackgroundColor $Colors.Danger
 Write-DashboardLog -Accion "Crear Usuario" -Resultado "Error: Password muy corto (menos de 6 caracteres)"
 return
 }
@@ -383,14 +347,14 @@ try{
 # Verificar permisos de administrador
 $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if(-not $isAdmin){
-Show-UDToast -Message "Error: El dashboard debe ejecutarse como Administrador" -Duration 8000 -BackgroundColor "#f44336"
+Show-UDToast -Message "Error: El dashboard debe ejecutarse como Administrador" -Duration 8000 -BackgroundColor $Colors.Danger
 return
 }
 
 # Verificar si el usuario ya existe
 $usuarioExiste = Get-LocalUser -Name $nombreUsuario -ErrorAction SilentlyContinue
 if($usuarioExiste){
-Show-UDToast -Message "Error: El usuario $nombreUsuario ya existe. Usa otro nombre o elimina el usuario existente." -Duration 8000 -BackgroundColor "#ff9800"
+Show-UDToast -Message "Error: El usuario $nombreUsuario ya existe. Usa otro nombre o elimina el usuario existente." -Duration 8000 -BackgroundColor $Colors.Warning
 Write-DashboardLog -Accion "Crear Usuario ($nombreUsuario)" -Resultado "Error: Usuario ya existe"
 return
 }
@@ -438,12 +402,11 @@ Start-Sleep -Milliseconds 500
 gpupdate /force 2>&1 | Out-Null
 
 Write-DashboardLog -Accion "Crear Usuario ($nombreUsuario)" -Resultado "Exitoso - PC: $env:COMPUTERNAME - Usuario configurado para login"
-Show-UDToast -Message "Usuario $nombreUsuario creado exitosamente. Password: $password. IMPORTANTE: Cierra sesion o reinicia para ver el usuario en la pantalla de login." -Duration 12000 -BackgroundColor "#4caf50"
-Start-Sleep -Seconds 2
+Show-UDToast -Message "Usuario $nombreUsuario creado exitosamente. Password: $password. IMPORTANTE: Cierra sesion o reinicia para ver el usuario en la pantalla de login." -Duration 12000 -BackgroundColor $Colors.Success
 Hide-UDModal
 }catch{
 Write-DashboardLog -Accion "Crear Usuario ($nombreUsuario)" -Resultado "Error: $_"
-Show-UDToast -Message "Error al crear usuario: $_" -Duration 8000 -BackgroundColor "#f44336"
+Show-UDToast -Message "Error al crear usuario: $_" -Duration 8000 -BackgroundColor $Colors.Danger
 }
 }
 }
@@ -515,7 +478,7 @@ $usuariosTexto += "- PC: $env:COMPUTERNAME`n"
 
 Show-UDModal -Content {
 New-UDHeading -Text "Usuarios en: $env:COMPUTERNAME" -Size 4
-New-UDElement -Tag 'div' -Attributes @{style=@{'background-color'='#e8f5e9';'padding'='10px';'border-radius'='5px';'margin-bottom'='15px';'border-left'='4px solid #4caf50'}} -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'background-color'='#e8f5e9';'padding'='10px';'border-radius'='5px';'margin-bottom'='15px';'border-left'='4px solid '+$Colors.Success}} -Content {
 New-UDElement -Tag 'p' -Content {"Usuarios personalizados: $totalUsuarios | Activos: $usuariosActivos | Sistema filtrados: $usuariosFiltrados"}
 }
 New-UDElement -Tag 'pre' -Attributes @{style=@{'background-color'='#f5f5f5';'padding'='15px';'border-radius'='5px';'font-family'='Consolas, monospace';'font-size'='13px';'overflow-x'='auto';'white-space'='pre-wrap';'max-height'='500px';'line-height'='1.6'}} -Content {$usuariosTexto}
@@ -523,11 +486,11 @@ New-UDElement -Tag 'pre' -Attributes @{style=@{'background-color'='#f5f5f5';'pad
 
 Write-DashboardLog -Accion "Ver Usuarios" -Resultado "Exitoso - PC: $env:COMPUTERNAME - Mostrados: $totalUsuarios - Filtrados: $usuariosFiltrados"
 } else {
-Show-UDToast -Message "No se encontraron usuarios personalizados en el sistema" -Duration 3000 -BackgroundColor "#ff9800"
+Show-UDToast -Message "No se encontraron usuarios personalizados en el sistema" -Duration 3000 -BackgroundColor $Colors.Warning
 }
 } catch {
 Write-DashboardLog -Accion "Ver Usuarios" -Resultado "Error: $_"
-Show-UDToast -Message "Error al obtener usuarios: $_" -Duration 5000 -BackgroundColor "#f44336"
+Show-UDToast -Message "Error al obtener usuarios: $_" -Duration 5000 -BackgroundColor $Colors.Danger
 }
 }
 # BOTON 5: Reparar Usuarios Existentes
@@ -586,10 +549,10 @@ Start-Sleep -Seconds 1
 gpupdate /force 2>&1 | Out-Null
 
 Write-DashboardLog -Accion "Reparar Usuarios" -Resultado "Reparados: $reparados, Errores: $errores - PC: $env:COMPUTERNAME"
-Show-UDToast -Message "Reparacion completada: $reparados usuarios configurados, $errores errores. CRITICO: Debes CERRAR SESION (no reiniciar) para que los usuarios aparezcan en la pantalla de login." -Duration 15000 -BackgroundColor "#4caf50"
+Show-UDToast -Message "Reparacion completada: $reparados usuarios configurados, $errores errores. CRITICO: Debes CERRAR SESION (no reiniciar) para que los usuarios aparezcan en la pantalla de login." -Duration 15000 -BackgroundColor $Colors.Success
 } catch {
 Write-DashboardLog -Accion "Reparar Usuarios" -Resultado "Error: $_"
-Show-UDToast -Message "Error al reparar usuarios: $_" -Duration 8000 -BackgroundColor "#f44336"
+Show-UDToast -Message "Error al reparar usuarios: $_" -Duration 8000 -BackgroundColor $Colors.Danger
 }
 }
 # BOTON 6: Eliminar Usuarios (MOVIDO del closure de Reparar Usuarios)
@@ -601,7 +564,7 @@ New-UDInputField -Name "nombreUsuarioEliminar" -Placeholder "Nombre exacto del u
 param($nombreUsuarioEliminar)
 
 if([string]::IsNullOrWhiteSpace($nombreUsuarioEliminar)){
-Show-UDToast -Message "Debes ingresar el nombre del usuario a eliminar" -Duration 3000 -BackgroundColor "#f44336"
+Show-UDToast -Message "Debes ingresar el nombre del usuario a eliminar" -Duration 3000 -BackgroundColor $Colors.Danger
 return
 }
 
@@ -609,7 +572,7 @@ return
 $usuariosProtegidos = @("Administrator", "Administrador", "DefaultAccount", "Guest", "Invitado", "WDAGUtilityAccount", "Paradise-SystemLabs", "Test7-POS")
 
 if($usuariosProtegidos -contains $nombreUsuarioEliminar){
-Show-UDToast -Message "Error: No se puede eliminar el usuario $nombreUsuarioEliminar (usuario protegido)" -Duration 8000 -BackgroundColor "#f44336"
+Show-UDToast -Message "Error: No se puede eliminar el usuario $nombreUsuarioEliminar (usuario protegido)" -Duration 8000 -BackgroundColor $Colors.Danger
 return
 }
 
@@ -617,7 +580,7 @@ try {
 # Verificar si el usuario existe
 $usuarioExiste = Get-LocalUser -Name $nombreUsuarioEliminar -ErrorAction SilentlyContinue
 if(-not $usuarioExiste){
-Show-UDToast -Message "Error: El usuario $nombreUsuarioEliminar no existe" -Duration 5000 -BackgroundColor "#ff9800"
+Show-UDToast -Message "Error: El usuario $nombreUsuarioEliminar no existe" -Duration 5000 -BackgroundColor $Colors.Warning
 return
 }
 
@@ -642,12 +605,11 @@ Remove-ItemProperty -Path $registroSpecialAccounts -Name $nombreUsuarioEliminar 
 } catch {}
 
 Write-DashboardLog -Accion "Eliminar Usuario ($nombreUsuarioEliminar)" -Resultado "Exitoso - PC: $env:COMPUTERNAME"
-Show-UDToast -Message "Usuario $nombreUsuarioEliminar eliminado exitosamente" -Duration 8000 -BackgroundColor "#4caf50"
-Start-Sleep -Seconds 2
+Show-UDToast -Message "Usuario $nombreUsuarioEliminar eliminado exitosamente" -Duration 8000 -BackgroundColor $Colors.Success
 Hide-UDModal
 } catch {
 Write-DashboardLog -Accion "Eliminar Usuario ($nombreUsuarioEliminar)" -Resultado "Error: $_"
-Show-UDToast -Message "Error al eliminar usuario: $_" -Duration 8000 -BackgroundColor "#f44336"
+Show-UDToast -Message "Error al eliminar usuario: $_" -Duration 8000 -BackgroundColor $Colors.Danger
 }
 }
 }
@@ -738,7 +700,7 @@ New-UDElement -Tag 'pre' -Attributes @{style=@{'background-color'='#f5f5f5';'pad
 
 Write-DashboardLog -Accion "Diagnostico Login" -Resultado "Completado"
 } catch {
-Show-UDToast -Message "Error en diagnostico: $_" -Duration 5000 -BackgroundColor "#f44336"
+Show-UDToast -Message "Error en diagnostico: $_" -Duration 5000 -BackgroundColor $Colors.Danger
 }
 }
 # BOTON 8: Configurar Biometria
@@ -750,32 +712,32 @@ New-UDButton -Text "Configurar Email Corporativo" -OnClick {Show-UDToast -Messag
 }
 }
 New-UDCard -Title "MANTENIMIENTO GENERAL" -Content {
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'='12px';'padding'='16px'}} -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'=$Spacing.S;'padding'=$Spacing.M}} -Content {
 New-UDButton -Text "Windows Update" -OnClick {Show-UDToast -Message "Verificando actualizaciones..." -Duration 2000;Write-DashboardLog -Accion "Windows Update" -Resultado "Iniciado"}
 New-UDButton -Text "Limpieza de Disco" -OnClick {Show-UDToast -Message "Limpiando disco..." -Duration 2000;Write-DashboardLog -Accion "Limpieza Disco" -Resultado "Iniciado"}
-New-UDButton -Text "Verificar Sistema" -Style @{'background-color'='#4caf50';'color'='white'} -OnClick {Show-UDToast -Message "Verificando..." -Duration 2000;Write-DashboardLog -Accion "Verificar Sistema" -Resultado "Iniciado"}
-New-UDButton -Text "Optimizar Rendimiento" -OnClick {Show-UDToast -Message "Optimizando..." -Duration 2000;Write-DashboardLog -Accion "Optimizar" -Resultado "Iniciado"} -Style @{'background-color'='#4caf50';'color'='white'}
+New-UDButton -Text "Verificar Sistema" -Style @{'background-color'=$Colors.Success;'color'='white'} -OnClick {Show-UDToast -Message "Verificando..." -Duration 2000;Write-DashboardLog -Accion "Verificar Sistema" -Resultado "Iniciado"}
+New-UDButton -Text "Optimizar Rendimiento" -OnClick {Show-UDToast -Message "Optimizando..." -Duration 2000;Write-DashboardLog -Accion "Optimizar" -Resultado "Iniciado"} -Style @{'background-color'=$Colors.Success;'color'='white'}
 }
 }
 }
-New-UDElement -Tag 'div' -Attributes @{style=@{'margin-top'='24px'}} -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'margin-top'=$Spacing.XL}} -Content {
 New-UDLayout -Columns 3 -Content {
 New-UDCard -Title "PUNTO DE VENTA" -Content {
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'='10px';'padding'='16px'}} -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'=$Spacing.XS;'padding'=$Spacing.M}} -Content {
 New-UDButton -Text "Reset Terminal" -OnClick {Show-UDToast -Message "Reseteando..." -Duration 2000;Write-DashboardLog -Accion "Reset Terminal" -Resultado "Iniciado"}
 New-UDButton -Text "Sincronizar Inventario" -OnClick {Show-UDToast -Message "Sincronizando..." -Duration 2000;Write-DashboardLog -Accion "Sync Inventario" -Resultado "Iniciado"}
 New-UDButton -Text "Config Impresora Fiscal" -OnClick {Show-UDToast -Message "Configurando..." -Duration 2000;Write-DashboardLog -Accion "Impresora Fiscal" -Resultado "Iniciado"}
 }
 }
 New-UDCard -Title "DISENO GRAFICO" -Content {
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'='10px';'padding'='16px'}} -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'=$Spacing.XS;'padding'=$Spacing.M}} -Content {
 New-UDButton -Text "Setup Adobe Suite" -OnClick {Show-UDToast -Message "Instalando Adobe..." -Duration 2000;Write-DashboardLog -Accion "Adobe" -Resultado "Iniciado"}
 New-UDButton -Text "Calibrar Monitor" -OnClick {Show-UDToast -Message "Calibrando..." -Duration 2000;Write-DashboardLog -Accion "Calibrar Monitor" -Resultado "Iniciado"}
 New-UDButton -Text "Drivers Impresora" -OnClick {Show-UDToast -Message "Instalando..." -Duration 2000;Write-DashboardLog -Accion "Drivers" -Resultado "Iniciado"}
 }
 }
 New-UDCard -Title "ATENCION AL CLIENTE" -Content {
-New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'='10px';'padding'='16px'}} -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'flex-direction'='column';'gap'=$Spacing.XS;'padding'=$Spacing.M}} -Content {
 New-UDButton -Text "Setup CRM" -OnClick {Show-UDToast -Message "Configurando CRM..." -Duration 2000;Write-DashboardLog -Accion "CRM" -Resultado "Iniciado"}
 New-UDButton -Text "Config Estacion" -OnClick {Show-UDToast -Message "Configurando..." -Duration 2000;Write-DashboardLog -Accion "Estacion" -Resultado "Iniciado"}
 New-UDButton -Text "Config Softphone" -OnClick {Show-UDToast -Message "Configurando..." -Duration 2000;Write-DashboardLog -Accion "Softphone" -Resultado "Iniciado"}
@@ -783,16 +745,16 @@ New-UDButton -Text "Config Softphone" -OnClick {Show-UDToast -Message "Configura
 }
 }
 }
-New-UDElement -Tag 'hr' -Attributes @{style=@{'margin'='24px 0'}}
+New-UDElement -Tag 'hr' -Attributes @{style=@{'margin'=$Spacing.XL+' 0'}}
 New-UDCard -Title "ACCIONES CRITICAS" -Content {
-New-UDElement -Tag 'div' -Attributes @{style=@{'padding'='16px';'background-color'='#ffe6e6';'border'='2px solid #dc3545';'border-radius'='5px'}} -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'padding'=$Spacing.M;'background-color'='#ffe6e6';'border'='2px solid '+$Colors.Danger;'border-radius'='5px'}} -Content {
 New-UDElement -Tag 'p' -Content {"ADVERTENCIA: Estas acciones afectaran el sistema inmediatamente"}
-New-UDElement -Tag 'div' -Attributes @{style=@{'margin-top'='12px';'display'='flex';'gap'='12px';'flex-wrap'='wrap'}} -Content {
+New-UDElement -Tag 'div' -Attributes @{style=@{'margin-top'=$Spacing.S;'display'='flex';'gap'=$Spacing.S;'flex-wrap'='wrap'}} -Content {
 New-UDButton -Text "REINICIAR PC" -OnClick {
 Show-UDModal -Content {
-New-UDHeading -Text "CONFIRMACION DE REINICIO" -Size 4 -Color "#dc3545"
-New-UDElement -Tag 'div' -Attributes @{style=@{'padding'='20px';'background-color'='#fff3cd';'border'='2px solid #ff9800';'border-radius'='5px';'margin'='20px 0'}} -Content {
-New-UDElement -Tag 'p' -Attributes @{style=@{'font-size'='16px';'font-weight'='bold';'color'='#dc3545';'margin-bottom'='10px'}} -Content {"ADVERTENCIA CRITICA"}
+New-UDHeading -Text "CONFIRMACION DE REINICIO" -Size 4 -Color $Colors.Danger
+New-UDElement -Tag 'div' -Attributes @{style=@{'padding'='20px';'background-color'='#fff3cd';'border'='2px solid '+$Colors.Warning;'border-radius'='5px';'margin'='20px 0'}} -Content {
+New-UDElement -Tag 'p' -Attributes @{style=@{'font-size'='16px';'font-weight'='bold';'color'=$Colors.Danger;'margin-bottom'='10px'}} -Content {"ADVERTENCIA CRITICA"}
 New-UDElement -Tag 'p' -Content {"Estas a punto de REINICIAR el equipo:"}
 New-UDElement -Tag 'p' -Attributes @{style=@{'font-weight'='bold';'color'='#000'}} -Content {"PC: $env:COMPUTERNAME"}
 New-UDElement -Tag 'hr'
@@ -806,21 +768,21 @@ New-UDElement -Tag 'li' -Content {"Detencion del dashboard"}
 }
 New-UDElement -Tag 'div' -Attributes @{style=@{'display'='flex';'gap'='12px';'justify-content'='center';'margin-top'='20px'}} -Content {
 New-UDButton -Text "SI, REINICIAR AHORA" -OnClick {
-Show-UDToast -Message "Confirmado. Reiniciando el equipo en 10 segundos..." -Duration 10000 -BackgroundColor "#ff9800"
+Show-UDToast -Message "Confirmado. Reiniciando el equipo en 10 segundos..." -Duration 10000 -BackgroundColor $Colors.Warning
 Write-DashboardLog -Accion "Reiniciar PC" -Resultado "Confirmado - Usuario: $env:USERNAME - PC: $env:COMPUTERNAME"
 Hide-UDModal
 Start-Sleep -Seconds 3
 Restart-Computer -Force
-} -Style @{'background-color'='#dc3545';'color'='white';'font-weight'='bold';'padding'='12px 24px'}
+} -Style @{'background-color'=$Colors.Danger;'color'='white';'font-weight'='bold';'padding'='12px 24px'}
 New-UDButton -Text "CANCELAR" -OnClick {
-Show-UDToast -Message "Reinicio cancelado" -Duration 3000 -BackgroundColor "#4caf50"
+Show-UDToast -Message "Reinicio cancelado" -Duration 3000 -BackgroundColor $Colors.Success
 Write-DashboardLog -Accion "Reiniciar PC" -Resultado "Cancelado por usuario"
 Hide-UDModal
 } -Style @{'background-color'='#6c757d';'color'='white';'padding'='12px 24px'}
 }
 } -Header {New-UDHeading -Text "Confirmar Reinicio del Sistema" -Size 5} -MaxWidth 'md' -Persistent
-} -Style @{'background-color'='#dc3545';'color'='white';'font-weight'='bold'}
-New-UDButton -Text "Reiniciar Dashboard" -OnClick {Show-UDToast -Message "Reiniciando dashboard..." -Duration 3000 -BackgroundColor "#ff9800";Write-DashboardLog -Accion "Reiniciar Dashboard" -Resultado "Solicitado";try{Get-UDDashboard | Stop-UDDashboard;Start-Sleep -Seconds 2;Start-Process powershell -ArgumentList "-ExecutionPolicy Bypass -NoExit -File `"$ScriptRoot\Dashboard.ps1`"" -Verb RunAs;exit}catch{Show-UDToast -Message "Error al reiniciar: $_" -Duration 5000 -BackgroundColor "#f44336"}} -Style @{'background-color'='#ff9800';'color'='white'}
+} -Style @{'background-color'=$Colors.Danger;'color'='white';'font-weight'='bold'}
+New-UDButton -Text "Reiniciar Dashboard" -OnClick {Show-UDToast -Message "Reiniciando dashboard..." -Duration 3000 -BackgroundColor $Colors.Warning;Write-DashboardLog -Accion "Reiniciar Dashboard" -Resultado "Solicitado";try{Get-UDDashboard | Stop-UDDashboard;Start-Sleep -Seconds 2;Start-Process powershell -ArgumentList "-ExecutionPolicy Bypass -NoExit -File `"$ScriptRoot\Dashboard.ps1`"" -Verb RunAs;exit}catch{Show-UDToast -Message "Error al reiniciar: $_" -Duration 5000 -BackgroundColor $Colors.Danger}} -Style @{'background-color'=$Colors.Warning;'color'='white'}
 }
 }}
 New-UDElement -Tag 'hr'
