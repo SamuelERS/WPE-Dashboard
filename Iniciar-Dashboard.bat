@@ -19,10 +19,26 @@ set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
 
 echo.
 echo ============================================
-echo   DASHBOARD PARADISE-SYSTEMLABS - ADMIN MODE
+echo   DASHBOARD PARADISE-SYSTEMLABS v2.0
+echo   Arquitectura Modular - ADMIN MODE
 echo ============================================
 echo.
-echo [OK] Ejecutando con permisos administrativos
+echo ============================================
+echo   INICIANDO DASHBOARD PARADISE-SYSTEMLABS
+echo   Arquitectura Modular v2.0
+echo ============================================
+echo.
+
+REM Ejecutar Dashboard.ps1 (v2.0 Modular) con PowerShell
+powershell.exe -ExecutionPolicy Bypass -File "%~dp0Dashboard.ps1"
+
+REM Si falla, intentar con version LEGACY como fallback
+if errorlevel 1 (
+    echo.
+    echo [WARN] Error con Dashboard v2.0, intentando version LEGACY...
+    powershell.exe -ExecutionPolicy Bypass -File "%~dp0Dashboard-LEGACY.ps1"
+)
+
 echo [INFO] Ubicacion detectada: %SCRIPT_DIR%
 echo.
 

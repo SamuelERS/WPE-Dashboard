@@ -77,19 +77,45 @@ function Get-ScriptMetadata {
 function Get-AllScriptsWithMetadata {
     <#
     .SYNOPSIS
-        Obtiene todos los scripts con metadata valida
+        Obtiene todos los scripts con metadata valida (con caché)
+    
+    .PARAMETER UseCache
+        Si es $true, usa caché si está disponible
     
     .OUTPUTS
         Array de hashtables con metadata de scripts
     #>
+    param(
+        [bool]$UseCache = $true
+    )
     
     $scriptsPath = Join-Path $Global:DashboardRoot "Scripts"
-    $allScripts = @()
+    $cachePath = Join-Path $Global:DashboardRoot "Cache"
+    $cacheFile = Join-Path $cachePath "scripts-metadata-cache.json"
     
     if (-not (Test-Path $scriptsPath)) {
         Write-DashboardLog -Message "Carpeta Scripts/ no encontrada" -Level "Error" -Component "ScriptLoader"
         return @()
     }
+    
+    # Verificar si existe caché válido
+    if ($UseCache -and (Test-Path $cacheFile)) {
+        try {
+            $cacheData = Get-Content $cacheFile -Raw | ConvertFrom-Json
+            $cacheAge = (Get-Date) - [DateTime]$cacheData.Timestamp
+            
+            # Caché válido por 5 minutos
+            if ($cacheAge.TotalMinutes -lt 5) {
+                Write-DashboardLog -Message "Usando caché de metadata (edad: $([math]::Round($cacheAge.TotalSeconds))s)" -Level "Info" -Component "ScriptLoader"
+                return $cacheData.Scripts
+            }
+        } catch {
+            Write-DashboardLog -Message "Error al leer caché, regenerando: $_" -Level "Warning" -Component "ScriptLoader"
+        }
+    }
+    
+    # Generar metadata desde archivos
+    $allScripts = @()
     
     # Buscar todos los .ps1 recursivamente, excluyendo PLANTILLA y ScriptLoader
     $scriptFiles = Get-ChildItem $scriptsPath -Recurse -Filter "*.ps1" | 
@@ -104,6 +130,23 @@ function Get-AllScriptsWithMetadata {
         if ($metadata -and $metadata.Enabled) {
             $allScripts += $metadata
         }
+    }
+    
+    # Guardar en caché
+    try {
+        if (-not (Test-Path $cachePath)) {
+            New-Item -Path $cachePath -ItemType Directory -Force | Out-Null
+        }
+        
+        $cacheData = @{
+            Timestamp = (Get-Date).ToString("o")
+            Scripts = $allScripts
+        }
+        
+        $cacheData | ConvertTo-Json -Depth 10 | Set-Content $cacheFile -Encoding UTF8
+        Write-DashboardLog -Message "Caché de metadata actualizado ($($allScripts.Count) scripts)" -Level "Info" -Component "ScriptLoader"
+    } catch {
+        Write-DashboardLog -Message "Error al guardar caché: $_" -Level "Warning" -Component "ScriptLoader"
     }
     
     Write-DashboardLog -Message "Scripts cargados: $($allScripts.Count)" -Level "Info" -Component "ScriptLoader"
