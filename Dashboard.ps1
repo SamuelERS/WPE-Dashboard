@@ -175,6 +175,26 @@ try {
     
     Write-DashboardLog -Message "Dashboard v2.0 iniciado en puerto 10000" -Level "Info" -Component "Dashboard"
     
+    # Abrir navegador automaticamente despues de 3 segundos
+    Start-Job -ScriptBlock {
+        Start-Sleep -Seconds 3
+        try {
+            # Intentar abrir con navegador predeterminado
+            Start-Process "http://localhost:10000"
+        } catch {
+            # Fallback: intentar con Edge o Chrome
+            try {
+                Start-Process "msedge.exe" "http://localhost:10000"
+            } catch {
+                try {
+                    Start-Process "chrome.exe" "http://localhost:10000"
+                } catch {
+                    # Silencioso si falla
+                }
+            }
+        }
+    } | Out-Null
+    
     # Mantener el proceso activo
     while ($true) {
         Start-Sleep -Seconds 1

@@ -4,6 +4,78 @@ Todos los cambios notables del proyecto están documentados en este archivo.
 
 ---
 
+## [1.0.0-LTS PATCH-3] - 2025-11-07 🔧 CORRECCIÓN PERMISOS CACHE Y ESCRITURA JSON
+
+**Estado:** ✅ CORRECCIÓN CRÍTICA APLICADA  
+**Tipo:** Bugfix - Permisos NTFS y manejo de errores  
+**Fecha:** 7 de Noviembre, 2025 - 23:45 UTC-06:00
+
+### 🐛 Problema Corregido
+
+**Error identificado:**
+```
+[Warning] [ScriptLoader] Error al guardar caché: Acceso denegado a la ruta de acceso 
+'C:\ProgramData\WPE-Dashboard\Cache\scripts-metadata-cache.json'.
+```
+
+**Síntomas:**
+- Dashboard arranca pero no responde en navegador (http://localhost:10000)
+- Mensaje "DASHBOARD INICIADO EXITOSAMENTE" pero interfaz no carga
+- UniversalDashboard congelado por excepción silenciosa de I/O
+
+**Causa raíz:**
+- Falta de permisos NTFS en `C:\ProgramData\WPE-Dashboard\Cache\`
+- Archivo `scripts-metadata-cache.json` no puede ser creado/modificado
+- Error de escritura bloquea inicialización de UniversalDashboard
+
+### 🔧 Correcciones Aplicadas
+
+**1. Core/ScriptLoader.ps1 - Manejo robusto de errores:**
+- ✅ Detección específica de `UnauthorizedAccessException`
+- ✅ Mensaje de ayuda con comando de reparación
+- ✅ Mejora en logging de errores con `$_.Exception.Message`
+- ✅ Validación de `$UseCache` antes de intentar escribir
+
+**2. Tools/Reparar-Permisos-Cache.ps1 - Script de reparación:**
+- ✅ Verificación de privilegios de administrador (#Requires -RunAsAdministrator)
+- ✅ Creación automática de carpeta Cache/ si no existe
+- ✅ Limpieza de archivos de caché dañados (0 bytes)
+- ✅ Reparación de permisos NTFS con icacls (Control Total + herencia OI/CI)
+- ✅ Verificación de permisos aplicados con Get-Acl
+- ✅ Prueba de escritura para confirmar corrección
+- ✅ Interfaz color-coded consistente con arquitectura v1.0.0-LTS
+
+### ✅ Validaciones
+
+- ✅ **Manejo de UnauthorizedAccessException:** Implementado en ScriptLoader
+- ✅ **Script de reparación:** Creado (234 líneas)
+- ✅ **Sintaxis válida:** Sin errores
+- ✅ **Comando de ayuda:** Incluido en mensaje de error
+
+### 📊 Impacto
+
+- 🔧 **Reparación automática:** Script dedicado para permisos Cache/
+- ✅ **Mensajes claros:** Usuario sabe exactamente qué ejecutar
+- 📈 **Robustez:** Manejo específico de errores de permisos
+- 🚀 **Resolución rápida:** 1 comando para corregir el problema
+
+### 🚀 Uso
+
+**Si aparece el warning de caché:**
+```powershell
+# Ejecutar como Administrador
+.\Tools\Reparar-Permisos-Cache.ps1
+
+# Luego reiniciar dashboard
+.\Iniciar-Dashboard.bat
+```
+
+### 📝 Documentación
+
+- ✅ **20-Correccion-Cache-Permisos.md** - Documentación técnica completa
+
+---
+
 ## [1.0.0-LTS PATCH-2] - 2025-11-07 🔧 CORRECCIÓN EXPORT-MODULEMEMBER
 
 **Estado:** ✅ CORRECCIÓN CRÍTICA APLICADA  

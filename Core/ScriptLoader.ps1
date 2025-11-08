@@ -133,20 +133,28 @@ function Get-AllScriptsWithMetadata {
     }
     
     # Guardar en caché
-    try {
-        if (-not (Test-Path $cachePath)) {
-            New-Item -Path $cachePath -ItemType Directory -Force | Out-Null
+    if ($UseCache) {
+        try {
+            # Crear directorio Cache si no existe
+            if (-not (Test-Path $cachePath)) {
+                New-Item -Path $cachePath -ItemType Directory -Force | Out-Null
+            }
+            
+            $cacheData = @{
+                Timestamp = (Get-Date).ToString("o")
+                Scripts = $allScripts
+            }
+            
+            # Intentar escribir caché con manejo robusto de errores
+            $json = $cacheData | ConvertTo-Json -Depth 10
+            $json | Set-Content $cacheFile -Encoding UTF8 -Force -ErrorAction Stop
+            
+            Write-DashboardLog -Message "Caché de metadata actualizado ($($allScripts.Count) scripts)" -Level "Info" -Component "ScriptLoader"
+        } catch [System.UnauthorizedAccessException] {
+            Write-DashboardLog -Message "Acceso denegado al guardar caché. Ejecute: .\Tools\Reparar-Permisos-Cache.ps1" -Level "Warning" -Component "ScriptLoader"
+        } catch {
+            Write-DashboardLog -Message "Error al guardar caché: $($_.Exception.Message)" -Level "Warning" -Component "ScriptLoader"
         }
-        
-        $cacheData = @{
-            Timestamp = (Get-Date).ToString("o")
-            Scripts = $allScripts
-        }
-        
-        $cacheData | ConvertTo-Json -Depth 10 | Set-Content $cacheFile -Encoding UTF8
-        Write-DashboardLog -Message "Caché de metadata actualizado ($($allScripts.Count) scripts)" -Level "Info" -Component "ScriptLoader"
-    } catch {
-        Write-DashboardLog -Message "Error al guardar caché: $_" -Level "Warning" -Component "ScriptLoader"
     }
     
     Write-DashboardLog -Message "Scripts cargados: $($allScripts.Count)" -Level "Info" -Component "ScriptLoader"
