@@ -242,5 +242,11 @@ function Get-LogStatistics {
     }
 }
 
-# Exportar funciones
-Export-ModuleMember -Function Write-DashboardLog, Get-RecentLogs, Clear-OldLogs, Get-LogStatistics
+# ============================================
+# FUNCIONES EXPORTADAS (dot-sourced)
+# ============================================
+# Las siguientes funciones estan disponibles:
+# - Write-DashboardLog
+# - Get-RecentLogs
+# - Clear-OldLogs
+# - Get-LogStatistics

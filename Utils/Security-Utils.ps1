@@ -90,5 +90,11 @@ function Get-CurrentUser {
     }
 }
 
-# Exportar funciones
-Export-ModuleMember -Function Test-AdminPrivileges, Assert-AdminPrivileges, Test-ScriptRequiresAdmin, Get-CurrentUser
+# ============================================
+# FUNCIONES EXPORTADAS (dot-sourced)
+# ============================================
+# Las siguientes funciones estan disponibles:
+# - Test-AdminPrivileges
+# - Assert-AdminPrivileges
+# - Test-ScriptRequiresAdmin
+# - Get-CurrentUser

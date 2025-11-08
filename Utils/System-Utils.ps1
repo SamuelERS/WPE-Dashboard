@@ -173,5 +173,13 @@ function Get-SystemUptime {
     }
 }
 
-# Exportar funciones
-Export-ModuleMember -Function Get-CurrentPCInfo, Get-FilteredLocalUsers, Test-PortAvailable, Get-DiskSpaceInfo, Test-InternetConnection, Get-SystemUptime
+# ============================================
+# FUNCIONES EXPORTADAS (dot-sourced)
+# ============================================
+# Las siguientes funciones estan disponibles:
+# - Get-CurrentPCInfo
+# - Get-FilteredLocalUsers
+# - Test-PortAvailable
+# - Get-DiskSpaceInfo
+# - Test-InternetConnection
+# - Get-SystemUptime

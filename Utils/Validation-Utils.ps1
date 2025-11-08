@@ -166,5 +166,12 @@ function Test-ValidEmail {
     return $Email -match $emailRegex
 }
 
-# Exportar funciones
-Export-ModuleMember -Function Test-ValidUsername, Test-ValidPassword, Test-ValidPCName, Sanitize-Input, Test-ValidEmail
+# ============================================
+# FUNCIONES EXPORTADAS (dot-sourced)
+# ============================================
+# Las siguientes funciones estan disponibles:
+# - Test-ValidUsername
+# - Test-ValidPassword
+# - Test-ValidPCName
+# - Sanitize-Input
+# - Test-ValidEmail
