@@ -1,4 +1,14 @@
-﻿param(
+﻿<# METADATA
+Name: Crear Usuario POS
+Description: Crea un usuario local para punto de venta con configuracion especifica
+Category: POS
+RequiresAdmin: true
+Icon: user-plus
+Order: 1
+Enabled: true
+#>
+
+param(
     [string]$Tienda = "Merliot"
 )
 

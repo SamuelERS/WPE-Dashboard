@@ -2,9 +2,9 @@
 # DASHBOARD PARADISE-SYSTEMLABS v1.0.1-LTS
 # ============================================
 # Version: 1.0.1-LTS - PARADISE DESIGN RESTORATION
-# Arquitectura: Modular v2.0 + Integración Híbrida
-# Estado: CERTIFICADO PARA PRODUCCION (Híbrido v1.0.1 + v2.0)
-# Fecha: 2025-11-08 (Híbrido)
+# Arquitectura: Modular v2.0
+# Estado: CERTIFICADO PARA PRODUCCION
+# Fecha: 2025-11-08
 
 <#
 .SYNOPSIS
@@ -85,25 +85,6 @@ Write-Host "[OK] ScriptLoader cargado" -ForegroundColor Green
 # UI
 . (Join-Path $ScriptRoot "UI\Dashboard-UI.ps1")
 Write-Host "[OK] Dashboard-UI cargado" -ForegroundColor Green
-
-# ============================================
-# INTEGRACION MODULAR v2.0 (OPCIONAL)
-# ============================================
-# Carga el módulo v2.0 si existe (arquitectura híbrida)
-
-$modulePath = Join-Path $ScriptRoot "Modules\DashboardContent.psm1"
-if (Test-Path $modulePath) {
-    try {
-        Import-Module $modulePath -Force -ErrorAction Stop
-        Write-Host "[OK] Módulo v2.0 detectado: DashboardContent.psm1" -ForegroundColor Cyan
-        $Global:ModuleV2Loaded = $true
-    } catch {
-        Write-Host "[WARN] Error al cargar módulo v2.0: $_" -ForegroundColor Yellow
-        $Global:ModuleV2Loaded = $false
-    }
-} else {
-    $Global:ModuleV2Loaded = $false
-}
 
 # ============================================
 # INICIALIZACION Y VALIDACION

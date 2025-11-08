@@ -53,7 +53,9 @@ function New-SystemInfoCard {
             }
         } -Content {
 
-            New-UDHeading -Size 5 -Text "PC ACTUAL: $pcName"
+            New-UDHeading -Size 5 -Text "PC ACTUAL: $pcName" -Content {
+                New-UDElement -Tag 'strong' -Content { "PC ACTUAL: $pcName" }
+            }
 
             New-UDElement -Tag 'p' -Attributes @{
                 style = @{'margin' = '8px 0'}

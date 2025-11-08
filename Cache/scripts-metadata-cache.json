@@ -1,5 +1,5 @@
 ﻿{
-    "Timestamp":  "2025-11-07T23:02:18.1696804-06:00",
+    "Timestamp":  "2025-11-08T11:47:40.2942147-06:00",
     "Scripts":  [
                     {
                         "Path":  "C:\\ProgramData\\WPE-Dashboard\\Scripts\\Configuracion\\Cambiar-Nombre-PC.ps1",
@@ -50,6 +50,16 @@
                         "Order":  1,
                         "Enabled":  true,
                         "Icon":  "shopping-cart"
+                    },
+                    {
+                        "Path":  "C:\\ProgramData\\WPE-Dashboard\\Scripts\\POS\\Crear-Usuario.ps1",
+                        "RequiresAdmin":  true,
+                        "Category":  "POS",
+                        "Name":  "Crear Usuario POS",
+                        "Description":  "Crea un usuario local para punto de venta con configuracion especifica",
+                        "Order":  1,
+                        "Enabled":  true,
+                        "Icon":  "user-plus"
                     }
                 ]
 }
