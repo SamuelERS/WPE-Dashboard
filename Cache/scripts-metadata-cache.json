@@ -1,0 +1,55 @@
+﻿{
+    "Timestamp":  "2025-11-07T23:02:18.1696804-06:00",
+    "Scripts":  [
+                    {
+                        "Path":  "C:\\ProgramData\\WPE-Dashboard\\Scripts\\Configuracion\\Cambiar-Nombre-PC.ps1",
+                        "RequiresAdmin":  true,
+                        "Category":  "Configuracion",
+                        "Name":  "Cambiar Nombre del PC",
+                        "Description":  "Cambia el nombre del equipo",
+                        "Order":  1,
+                        "Enabled":  true,
+                        "Icon":  "desktop"
+                    },
+                    {
+                        "Path":  "C:\\ProgramData\\WPE-Dashboard\\Scripts\\Configuracion\\Crear-Usuario-Sistema.ps1",
+                        "RequiresAdmin":  true,
+                        "Category":  "Configuracion",
+                        "Name":  "Crear Usuario Sistema",
+                        "Description":  "Crea un nuevo usuario local",
+                        "Order":  2,
+                        "Enabled":  true,
+                        "Icon":  "user-plus"
+                    },
+                    {
+                        "Path":  "C:\\ProgramData\\WPE-Dashboard\\Scripts\\Mantenimiento\\Eliminar-Usuario.ps1",
+                        "RequiresAdmin":  true,
+                        "Category":  "Mantenimiento",
+                        "Name":  "Eliminar Usuario",
+                        "Description":  "Elimina un usuario local",
+                        "Order":  2,
+                        "Enabled":  true,
+                        "Icon":  "user-minus"
+                    },
+                    {
+                        "Path":  "C:\\ProgramData\\WPE-Dashboard\\Scripts\\Mantenimiento\\Limpiar-Archivos-Temporales.ps1",
+                        "RequiresAdmin":  false,
+                        "Category":  "Mantenimiento",
+                        "Name":  "Limpieza de Archivos Temporales",
+                        "Description":  "Elimina archivos temporales de Windows y usuario para liberar espacio",
+                        "Order":  1,
+                        "Enabled":  true,
+                        "Icon":  "trash"
+                    },
+                    {
+                        "Path":  "C:\\ProgramData\\WPE-Dashboard\\Scripts\\POS\\Crear-Usuario-POS.ps1",
+                        "RequiresAdmin":  true,
+                        "Category":  "POS",
+                        "Name":  "Crear Usuario POS",
+                        "Description":  "Crea usuario para sistema POS",
+                        "Order":  1,
+                        "Enabled":  true,
+                        "Icon":  "shopping-cart"
+                    }
+                ]
+}

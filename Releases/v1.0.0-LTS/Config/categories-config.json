@@ -1,0 +1,31 @@
+{
+  "categories": [
+    {
+      "id": "configuracion",
+      "title": "CONFIGURACIÓN INICIAL",
+      "icon": "⚙️",
+      "path": "Configuracion",
+      "order": 1,
+      "visible": true,
+      "description": "Configuración inicial del sistema Windows"
+    },
+    {
+      "id": "mantenimiento",
+      "title": "MANTENIMIENTO",
+      "icon": "🔧",
+      "path": "Mantenimiento",
+      "order": 2,
+      "visible": true,
+      "description": "Tareas de mantenimiento y limpieza del sistema"
+    },
+    {
+      "id": "pos",
+      "title": "PUNTO DE VENTA",
+      "icon": "💰",
+      "path": "POS",
+      "order": 3,
+      "visible": true,
+      "description": "Configuración de sistemas de punto de venta"
+    }
+  ]
+}
