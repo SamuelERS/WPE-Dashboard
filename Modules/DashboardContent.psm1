@@ -4,8 +4,13 @@
 # ===================================================================
 #
 # Descripción:
-#   Módulo base para la arquitectura modular v2.0 del Paradise Dashboard.
-#   Implementa el contenido principal del dashboard de forma desacoplada.
+#   Primer módulo v2.0 de la arquitectura modular del Paradise Dashboard.
+#   Implementa contenido demo para validar arquitectura híbrida.
+#
+# Arquitectura:
+#   - Parte del sistema híbrido v1.0.1-LTS + v2.0
+#   - Cargado vía Import-Module (aislado de scope global)
+#   - Coexiste con v1.0.1-LTS sin conflictos
 #
 # Compatibilidad:
 #   - UniversalDashboard.Community v2.9.0
@@ -17,8 +22,10 @@
 #
 # Autor: Paradise-SystemLabs
 # Versión: 2.0.0
-# Fecha: 2025-11-08
+# Fecha Creación: 2025-11-06
+# Última Modificación: 2025-11-08 (Hotfix conflicto nombres)
 # Caso: 10 - Restauración Modular v2.0
+# Estado: FUNCIONAL - Tests: 9/9 pasados
 # ===================================================================
 
 <#

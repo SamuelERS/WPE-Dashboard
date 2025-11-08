@@ -1,22 +1,33 @@
 # ============================================
-# DASHBOARD INIT - INICIALIZACION MODULAR
+# DASHBOARD INIT - INICIALIZACION v1.0.1-LTS
 # ============================================
-# Version: 2.0 - Modular y Dinamico
-# Proposito: Inicializar dashboard con validaciones y carga de modulos
+# Version: 1.0.1-LTS (v1.0.1-LTS-Hybrid)
+# Arquitectura: v1.0.1 (dot-sourcing) - Coexiste con v2.0
+# Propósito: Inicializar dashboard con validaciones y carga de módulos
+# Estado: FUNCIONAL - Preservado en arquitectura híbrida
+# Fecha: 2025-11-08
+# Caso: 10 - Restauración Modular v2.0
 
 <#
 .SYNOPSIS
-    Inicializador modular del dashboard
+    Inicializador del dashboard v1.0.1-LTS
 
 .DESCRIPTION
-    Maneja toda la inicializacion del dashboard:
-    - Validacion de JSON
-    - Carga de configuracion
-    - Verificacion de modulos
-    - Importacion de utilidades
+    Maneja toda la inicialización del dashboard:
+    - Validación de JSON
+    - Carga de configuración desde dashboard-config.json
+    - Verificación de módulos UniversalDashboard
+    - Importación de utilidades
+
+    Parte de la arquitectura híbrida v1.0.1-LTS + v2.0
 
 .NOTES
-    Este modulo debe cargarse primero
+    Version: 1.0.1-LTS
+    Arquitectura: v1.0.1 (preservado)
+    Este módulo debe cargarse primero (dot-sourcing)
+    Estado: FUNCIONAL - Coexiste con v2.0
+    Funciones: 4 (Initialize-DashboardConfig, Get-DashboardColors,
+               Get-CategoriesConfig, Initialize-UniversalDashboard)
 #>
 
 # ============================================

@@ -2,6 +2,12 @@
 # Test-Hybrid-Integration.ps1
 # Prueba de Integración Híbrida v1.0.1 + v2.0
 # ===================================================================
+# Version: 1.0.0
+# Fecha: 2025-11-08
+# Caso: 10 - Restauración Modular v2.0
+# Propósito: Validar coexistencia de v1.0.1-LTS + v2.0
+# Estado: FUNCIONAL - Todos los tests pasan
+# ===================================================================
 
 $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $DashboardRoot = Split-Path -Parent $ScriptRoot

@@ -40,9 +40,9 @@ Describe "Módulo DashboardContent.psm1 - Validaciones Básicas" {
             { Import-Module $ModulePath -Force -ErrorAction Stop } | Should -Not -Throw
         }
 
-        It "Función New-DashboardContent está exportada" {
+        It "Función New-ParadiseModuleDemo está exportada" {
             $functions = (Get-Module DashboardContent).ExportedFunctions.Keys
-            $functions | Should -Contain "New-DashboardContent"
+            $functions | Should -Contain "New-ParadiseModuleDemo"
         }
     }
 
@@ -52,17 +52,17 @@ Describe "Módulo DashboardContent.psm1 - Validaciones Básicas" {
             Import-Module $ModulePath -Force
         }
 
-        It "Función New-DashboardContent existe y es ejecutable" {
-            Get-Command New-DashboardContent -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
+        It "Función New-ParadiseModuleDemo existe y es ejecutable" {
+            Get-Command New-ParadiseModuleDemo -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
         }
 
         It "Función retorna contenido válido (no nulo)" {
-            $result = New-DashboardContent
+            $result = New-ParadiseModuleDemo
             $result | Should -Not -BeNullOrEmpty
         }
 
         It "Función no lanza excepciones" {
-            { New-DashboardContent } | Should -Not -Throw
+            { New-ParadiseModuleDemo } | Should -Not -Throw
         }
     }
 
@@ -160,6 +160,71 @@ Describe "Arquitectura Híbrida - Coexistencia v1.0.1 + v2.0" {
             if ($backups) {
                 Test-Path (Join-Path $backups.FullName "BACKUP_INFO.txt") | Should -Be $true
             }
+        }
+    }
+}
+
+# ===================================================================
+# Tests de Performance - Tiempo de arranque
+# ===================================================================
+
+Describe "Performance - Tiempo de Arranque" {
+
+    Context "Carga de módulos" {
+
+        It "Tiempo de import de módulo v2.0 < 1 segundo" {
+            $time = Measure-Command {
+                Import-Module (Join-Path $PSScriptRoot "..\..\Modules\DashboardContent.psm1") -Force
+            }
+            $time.TotalSeconds | Should -BeLessThan 1
+        }
+    }
+}
+
+# ===================================================================
+# Tests de Estructura - Funciones Críticas
+# ===================================================================
+
+Describe "Estructura - Funciones Críticas v1.0.1" {
+
+    BeforeAll {
+        . (Join-Path $PSScriptRoot "..\..\Utils\Logging-Utils.ps1")
+        . (Join-Path $PSScriptRoot "..\..\Core\Dashboard-Init.ps1")
+        . (Join-Path $PSScriptRoot "..\..\Core\ScriptLoader.ps1")
+        . (Join-Path $PSScriptRoot "..\..\UI\Dashboard-UI.ps1")
+    }
+
+    Context "Funciones Core" {
+
+        It "Initialize-DashboardConfig existe" {
+            Get-Command Initialize-DashboardConfig -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
+        }
+
+        It "Get-DashboardColors existe" {
+            Get-Command Get-DashboardColors -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
+        }
+
+        It "Get-ScriptsByCategory existe" {
+            Get-Command Get-ScriptsByCategory -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
+        }
+
+        It "Write-DashboardLog existe" {
+            Get-Command Write-DashboardLog -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
+        }
+    }
+
+    Context "Funciones Paradise UI" {
+
+        It "Get-ParadiseGlobalCSS existe" {
+            Get-Command Get-ParadiseGlobalCSS -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
+        }
+
+        It "New-SystemInfoCard existe" {
+            Get-Command New-SystemInfoCard -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
+        }
+
+        It "New-DashboardContent (v1.0.1) existe" {
+            Get-Command New-DashboardContent -ErrorAction SilentlyContinue | Should -Not -BeNullOrEmpty
         }
     }
 }

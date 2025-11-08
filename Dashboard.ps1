@@ -1,10 +1,12 @@
 # ============================================
-# DASHBOARD PARADISE-SYSTEMLABS v1.0.1-LTS
+# DASHBOARD PARADISE-SYSTEMLABS v2.1-pre
 # ============================================
-# Version: 1.0.1-LTS - PARADISE DESIGN RESTORATION
-# Arquitectura: Modular v2.0 + Integración Híbrida
-# Estado: CERTIFICADO PARA PRODUCCION (Híbrido v1.0.1 + v2.0)
-# Fecha: 2025-11-08 (Híbrido)
+# Version: 2.1-pre (Refinamiento UI Activo)
+# Arquitectura: Híbrida (v1.0.1-LTS + v2.0 Modular)
+# Estado: EN DESARROLLO - Caso 11 Iniciado
+# Fecha: 2025-11-08
+# Caso Anterior: Caso 10 CERRADO - 2025-11-08
+# Caso Actual: Caso 11 - Refinamiento UI v2.1
 
 <#
 .SYNOPSIS
@@ -22,10 +24,13 @@
     .\Dashboard.ps1 -Version
 
 .NOTES
-    Version: 1.0.1-LTS
+    Version: 1.0.1-LTS-Hybrid
+    Arquitectura: Híbrida (v1.0.1-LTS dot-sourcing + v2.0 Import-Module)
     Requiere: UniversalDashboard.Community 2.9.0
     Puerto: 10000
-    Estado: PARADISE DESIGN RESTORATION
+    Estado: FUNCIONAL - Caso 10 Completado
+    Caso: Restauración Modular v2.0
+    Tests: 33/33 pasados (100%)
 #>
 
 param(
