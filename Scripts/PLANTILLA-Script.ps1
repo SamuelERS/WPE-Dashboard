@@ -27,12 +27,15 @@ param(
     [string]$tipoUsuario
 )
 
-# Función de logging (siempre disponible)
+# Función de logging (siempre disponible - PORTABLE)
 function Write-ScriptLog {
     param([string]$Mensaje)
-    $LogFile = "C:\WPE-Dashboard\Logs\dashboard-$(Get-Date -Format 'yyyy-MM').log"
+    if (-not $Global:DashboardRoot) {
+        $Global:DashboardRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+    }
+    $LogFile = Join-Path $Global:DashboardRoot "Logs\dashboard-$(Get-Date -Format 'yyyy-MM').log"
     $Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    Add-Content -Path $LogFile -Value "[$Timestamp] $Mensaje"
+    Add-Content -Path $LogFile -Value "[$Timestamp] $Mensaje" -ErrorAction SilentlyContinue
 }
 
 # Validar permisos si es necesario

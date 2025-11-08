@@ -1,17 +1,21 @@
-# ============================================
+﻿# ============================================
 # CREAR USUARIO POS
 # ============================================
-# @Name: Crear Usuario POS
-# @Description: Crea un usuario estándar para punto de venta sin permisos de administrador
-# @Category: POS
-# @RequiresAdmin: true
-# @HasForm: true
+<# METADATA
+Name: Crear Usuario POS
+Description: Crea usuario para sistema POS
+Category: POS
+RequiresAdmin: true
+Icon: shopping-cart
+Order: 1
+Enabled: true
+#>
 # @FormField: nombreUsuario|Nombre del usuario POS|textbox
 # @FormField: password|Password|password
 
 <#
 .SYNOPSIS
-    Crea un usuario estándar para punto de venta
+    Crea un usuario estÃ¡ndar para punto de venta
 .DESCRIPTION
     Script modular para crear usuarios POS sin permisos de administrador.
     Agrega el usuario al grupo Usuarios (no Administradores).
@@ -28,7 +32,7 @@ param(
     [string]$password
 )
 
-# Detectar ubicación del dashboard para rutas relativas
+# Detectar ubicaciÃ³n del dashboard para rutas relativas
 if (-not $Global:DashboardRoot) {
     $Global:DashboardRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 }
@@ -42,9 +46,9 @@ try {
     # Verificar permisos de administrador primero
     Assert-AdminPrivileges
     
-    # Validar que se proporcionó nombre de usuario
+    # Validar que se proporcionÃ³ nombre de usuario
     if ([string]::IsNullOrWhiteSpace($nombreUsuario)) {
-        throw "Debes ingresar un nombre de usuario válido"
+        throw "Debes ingresar un nombre de usuario vÃ¡lido"
     }
     
     # Sanitizar input
@@ -52,7 +56,7 @@ try {
     
     # Validar nombre de usuario usando utilidad
     if (-not (Test-ValidUsername -Username $nombreUsuario)) {
-        throw "Nombre de usuario inválido. Debe tener 3-20 caracteres alfanuméricos, guiones o guiones bajos."
+        throw "Nombre de usuario invÃ¡lido. Debe tener 3-20 caracteres alfanumÃ©ricos, guiones o guiones bajos."
     }
     
     # Validar password (obligatorio)
@@ -60,7 +64,7 @@ try {
         throw "Debes ingresar un password para el nuevo usuario. Campo obligatorio."
     }
     
-    # Validar longitud de password (mínimo 4 para POS)
+    # Validar longitud de password (mÃ­nimo 4 para POS)
     if (-not (Test-ValidPassword -Password $password -MinLength 4)) {
         throw "El password debe tener al menos 4 caracteres."
     }
@@ -106,3 +110,4 @@ try {
         Message = "Error: $errorMsg"
     }
 }
+

@@ -1,11 +1,15 @@
-# ============================================
+﻿# ============================================
 # ELIMINAR USUARIO
 # ============================================
-# @Name: Eliminar Usuario
-# @Description: Elimina un usuario local del sistema de forma segura
-# @Category: Mantenimiento
-# @RequiresAdmin: true
-# @HasForm: true
+<# METADATA
+Name: Eliminar Usuario
+Description: Elimina un usuario local
+Category: Mantenimiento
+RequiresAdmin: true
+Icon: user-minus
+Order: 2
+Enabled: true
+#>
 # @FormField: nombreUsuario|Nombre del usuario a eliminar|textbox
 
 <#
@@ -13,7 +17,7 @@
     Elimina un usuario local del sistema
 .DESCRIPTION
     Script modular para eliminar usuarios locales de Windows con validaciones de seguridad.
-    Protege usuarios críticos del sistema y elimina el perfil del usuario.
+    Protege usuarios crÃ­ticos del sistema y elimina el perfil del usuario.
 .NOTES
     Requiere permisos de administrador
     Parte de la arquitectura modular WPE-Dashboard
@@ -24,7 +28,7 @@ param(
     [string]$nombreUsuario
 )
 
-# Detectar ubicación del dashboard para rutas relativas
+# Detectar ubicaciÃ³n del dashboard para rutas relativas
 if (-not $Global:DashboardRoot) {
     $Global:DashboardRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 }
@@ -38,7 +42,7 @@ try {
     # Verificar permisos de administrador primero
     Assert-AdminPrivileges
     
-    # Validar que se proporcionó nombre de usuario
+    # Validar que se proporcionÃ³ nombre de usuario
     if ([string]::IsNullOrWhiteSpace($nombreUsuario)) {
         throw "Debes ingresar el nombre del usuario a eliminar"
     }
@@ -110,3 +114,4 @@ try {
         Message = "Error: $errorMsg"
     }
 }
+

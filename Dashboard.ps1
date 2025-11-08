@@ -4,7 +4,11 @@
 
 # Detectar la ubicacion del script automaticamente (PORTABLE)
 $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$Global:DashboardRoot = $ScriptRoot
 Write-Host "Ubicacion del dashboard: $ScriptRoot" -ForegroundColor Cyan
+
+# Importar utilidades de logging
+. (Join-Path $ScriptRoot "Utils\Logging-Utils.ps1")
 
 # Verificar si el módulo está disponible (instalado)
 $moduloDisponible = Get-Module -ListAvailable -Name UniversalDashboard.Community
@@ -185,21 +189,112 @@ if (-not $portCheck) {
     }
 }
 
-# Funcion de logging (PORTABLE - usa ubicacion relativa)
+# NOTA: Write-DashboardLog ahora viene de Utils/Logging-Utils.ps1
+# Las llamadas con parametros -Accion y -Resultado siguen funcionando
+# gracias a este wrapper de compatibilidad
+$originalWriteDashboardLog = Get-Command Write-DashboardLog
 function Write-DashboardLog {
-    param([string]$Accion, [string]$Resultado)
-    $LogFile = Join-Path $ScriptRoot "Logs\dashboard-$(Get-Date -Format 'yyyy-MM').log"
-    $Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    try {
-        Add-Content -Path $LogFile -Value "[$Timestamp] $Accion - $Resultado" -ErrorAction SilentlyContinue
-    } catch {
-        Write-Host "Error al escribir log: $_" -ForegroundColor Red
+    param(
+        [string]$Accion,
+        [string]$Resultado,
+        [string]$Message,
+        [string]$Level = "Info",
+        [string]$Component = "Dashboard"
+    )
+    
+    # Si se usan los parametros legacy (-Accion, -Resultado)
+    if ($Accion -or $Resultado) {
+        & $originalWriteDashboardLog -Message "$Accion - $Resultado" -Level $Level -Component $Component
+    }
+    # Si se usan los parametros nuevos (-Message, -Level, -Component)
+    elseif ($Message) {
+        & $originalWriteDashboardLog -Message $Message -Level $Level -Component $Component
     }
 }
 
-# Variables de Diseno
-$Colors = @{Primary = "#2196F3"; Success = "#4caf50"; Warning = "#ff9800"; Danger = "#dc3545"}
-$Spacing = @{XS = "10px"; S = "12px"; M = "16px"; L = "20px"; XL = "24px"}
+# ============================================
+# VALIDACION Y CARGA DE CONFIGURACION JSON
+# ============================================
+
+function Test-JsonConfig {
+    param([string]$Path, [string]$Name)
+    
+    if (-not (Test-Path $Path)) {
+        Write-Host "[ERROR] Archivo de configuracion no encontrado: $Name" -ForegroundColor Red
+        Write-Host "  Ruta esperada: $Path" -ForegroundColor Gray
+        return $false
+    }
+    
+    try {
+        $content = Get-Content $Path -Raw -ErrorAction Stop
+        $json = $content | ConvertFrom-Json -ErrorAction Stop
+        return $json
+    } catch {
+        Write-Host "[ERROR] JSON invalido en $Name" -ForegroundColor Red
+        Write-Host "  Error: $($_.Exception.Message)" -ForegroundColor Gray
+        Write-Host "  Linea: $($_.InvocationInfo.ScriptLineNumber)" -ForegroundColor Gray
+        return $false
+    }
+}
+
+# Validar dashboard-config.json
+$configPath = Join-Path $ScriptRoot "Config\dashboard-config.json"
+$dashConfig = Test-JsonConfig -Path $configPath -Name "dashboard-config.json"
+
+if ($dashConfig -eq $false) {
+    Write-Host "`n[CRITICO] No se puede iniciar el dashboard sin configuracion valida" -ForegroundColor Red
+    Write-Host "Soluciones:" -ForegroundColor Yellow
+    Write-Host "  1. Verifica que exista: $configPath" -ForegroundColor White
+    Write-Host "  2. Valida la sintaxis JSON en: https://jsonlint.com/" -ForegroundColor White
+    Write-Host "  3. Restaura desde backup si es necesario" -ForegroundColor White
+    Write-DashboardLog -Message "Dashboard detenido: JSON invalido" -Level "Critical" -Component "Dashboard"
+    pause
+    exit 1
+}
+
+# Validar estructura del JSON
+try {
+    if (-not $dashConfig.ui) { throw "Falta seccion 'ui'" }
+    if (-not $dashConfig.ui.colors) { throw "Falta seccion 'ui.colors'" }
+    if (-not $dashConfig.ui.spacing) { throw "Falta seccion 'ui.spacing'" }
+    
+    # Cargar colores desde JSON
+    $Colors = @{
+        Primary = $dashConfig.ui.colors.primary
+        Success = $dashConfig.ui.colors.success
+        Warning = $dashConfig.ui.colors.warning
+        Danger = $dashConfig.ui.colors.danger
+    }
+    
+    # Cargar espaciado desde JSON
+    $Spacing = @{
+        XS = $dashConfig.ui.spacing.xs
+        S = $dashConfig.ui.spacing.s
+        M = $dashConfig.ui.spacing.m
+        L = $dashConfig.ui.spacing.l
+        XL = $dashConfig.ui.spacing.xl
+    }
+    
+    Write-Host "[OK] Configuracion JSON validada y cargada" -ForegroundColor Green
+    Write-DashboardLog -Message "Configuracion JSON cargada exitosamente" -Level "Info" -Component "Dashboard"
+    
+} catch {
+    Write-Host "[ERROR] Estructura JSON invalida: $_" -ForegroundColor Red
+    Write-Host "El archivo JSON existe pero le faltan campos requeridos" -ForegroundColor Yellow
+    Write-DashboardLog -Message "JSON con estructura invalida: $_" -Level "Error" -Component "Dashboard"
+    pause
+    exit 1
+}
+
+# Validar categories-config.json (opcional pero recomendado)
+$categoriesPath = Join-Path $ScriptRoot "Config\categories-config.json"
+$categoriesConfig = Test-JsonConfig -Path $categoriesPath -Name "categories-config.json"
+
+if ($categoriesConfig -ne $false) {
+    Write-Host "[OK] categories-config.json validado" -ForegroundColor Green
+} else {
+    Write-Host "[WARN] categories-config.json no disponible (no critico)" -ForegroundColor Yellow
+}
 
 Write-Host "`n============================================" -ForegroundColor Cyan
 Write-Host "  DASHBOARD INICIANDO" -ForegroundColor Green

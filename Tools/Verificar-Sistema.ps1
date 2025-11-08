@@ -125,7 +125,8 @@ Write-Host ""
 Write-Host "6. VERIFICANDO SCRIPTS" -ForegroundColor White
 Write-Host "─────────────────────────────────────────" -ForegroundColor Gray
 
-$totalScripts = (Get-ChildItem "C:\WPE-Dashboard\Scripts" -Recurse -Filter "*.ps1" | 
+$scriptsPath = Join-Path $Global:DashboardRoot "Scripts"
+$totalScripts = (Get-ChildItem $scriptsPath -Recurse -Filter "*.ps1" | 
                  Where-Object {$_.Name -ne "ScriptLoader.ps1" -and $_.Name -ne "PLANTILLA-Script.ps1"} | 
                  Measure-Object).Count
 
@@ -133,7 +134,7 @@ Write-Host "[INFO] Scripts implementados: $totalScripts" -ForegroundColor Cyan
 
 # Verificar sintaxis de scripts
 $scriptsConErrores = 0
-Get-ChildItem "C:\WPE-Dashboard\Scripts" -Recurse -Filter "*.ps1" | 
+Get-ChildItem $scriptsPath -Recurse -Filter "*.ps1" | 
     Where-Object {$_.Name -ne "ScriptLoader.ps1"} | 
     ForEach-Object {
         $errors = $null
@@ -149,7 +150,7 @@ Write-Host ""
 Write-Host "7. VERIFICANDO LOGS" -ForegroundColor White
 Write-Host "─────────────────────────────────────────" -ForegroundColor Gray
 
-$logActual = "C:\WPE-Dashboard\Logs\dashboard-$(Get-Date -Format 'yyyy-MM').log"
+$logActual = Join-Path $Global:DashboardRoot "Logs\dashboard-$(Get-Date -Format 'yyyy-MM').log"
 $logExiste = Test-Path $logActual
 Show-Check "Log del mes actual" $logExiste "Se creará automáticamente al usar el dashboard" "Warning"
 

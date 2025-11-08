@@ -1,11 +1,15 @@
-# ============================================
+﻿# ============================================
 # CREAR USUARIO DEL SISTEMA
 # ============================================
-# @Name: Crear Usuario del Sistema
-# @Description: Crea un nuevo usuario local de Windows con permisos de administrador
-# @Category: Configuracion
-# @RequiresAdmin: true
-# @HasForm: true
+<# METADATA
+Name: Crear Usuario Sistema
+Description: Crea un nuevo usuario local
+Category: Configuracion
+RequiresAdmin: true
+Icon: user-plus
+Order: 2
+Enabled: true
+#>
 # @FormField: nombreUsuario|Ejemplo: POS-Merliot|textbox
 # @FormField: password|Password (obligatorio)|password
 # @FormField: tipoUsuario|Tipo de usuario|select:POS,Admin,Diseno,Cliente,Mantenimiento
@@ -32,7 +36,7 @@ param(
     [string]$tipoUsuario = "POS"
 )
 
-# Detectar ubicación del dashboard para rutas relativas
+# Detectar ubicaciÃ³n del dashboard para rutas relativas
 if (-not $Global:DashboardRoot) {
     $Global:DashboardRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 }
@@ -46,9 +50,9 @@ try {
     # Verificar permisos de administrador primero
     Assert-AdminPrivileges
     
-    # Validar que se proporcionó nombre de usuario
+    # Validar que se proporcionÃ³ nombre de usuario
     if ([string]::IsNullOrWhiteSpace($nombreUsuario)) {
-        throw "Debes ingresar un nombre de usuario válido"
+        throw "Debes ingresar un nombre de usuario vÃ¡lido"
     }
     
     # Sanitizar input
@@ -56,7 +60,7 @@ try {
     
     # Validar nombre de usuario usando utilidad
     if (-not (Test-ValidUsername -Username $nombreUsuario)) {
-        throw "Nombre de usuario inválido. Debe tener 3-20 caracteres alfanuméricos, guiones o guiones bajos."
+        throw "Nombre de usuario invÃ¡lido. Debe tener 3-20 caracteres alfanumÃ©ricos, guiones o guiones bajos."
     }
     
     # Validar password (obligatorio)
@@ -115,3 +119,4 @@ try {
         Message = "Error: $errorMsg"
     }
 }
+

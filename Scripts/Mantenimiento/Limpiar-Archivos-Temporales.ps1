@@ -1,11 +1,16 @@
 # ============================================
 # LIMPIAR ARCHIVOS TEMPORALES
 # ============================================
-# @Name: Limpieza de Archivos Temporales
-# @Description: Elimina archivos temporales de Windows y usuario para liberar espacio
-# @Category: Mantenimiento
-# @RequiresAdmin: false
-# @HasForm: false
+
+<# METADATA
+Name: Limpieza de Archivos Temporales
+Description: Elimina archivos temporales de Windows y usuario para liberar espacio
+Category: Mantenimiento
+RequiresAdmin: false
+Icon: trash
+Order: 1
+Enabled: true
+#>
 
 <#
 .SYNOPSIS
@@ -14,7 +19,7 @@
     Script modular para limpiar archivos temporales del sistema y del usuario actual.
     No requiere permisos de administrador.
 .NOTES
-    Parte de la arquitectura modular WPE-Dashboard
+    Parte de la arquitectura modular WPE-Dashboard v2.0
 #>
 
 # Detectar ubicación del dashboard para rutas relativas

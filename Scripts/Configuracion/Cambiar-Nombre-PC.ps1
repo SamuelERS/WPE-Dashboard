@@ -1,11 +1,15 @@
-# ============================================
+﻿# ============================================
 # CAMBIAR NOMBRE DEL PC
 # ============================================
-# @Name: Cambiar Nombre del PC
-# @Description: Cambia el nombre del equipo de forma segura con validaciones
-# @Category: Configuracion
-# @RequiresAdmin: true
-# @HasForm: true
+<# METADATA
+Name: Cambiar Nombre del PC
+Description: Cambia el nombre del equipo
+Category: Configuracion
+RequiresAdmin: true
+Icon: desktop
+Order: 1
+Enabled: true
+#>
 # @FormField: nuevoNombre|Nuevo nombre del PC|textbox
 
 <#
@@ -13,7 +17,7 @@
     Cambia el nombre del equipo de Windows
 .DESCRIPTION
     Script modular para cambiar el nombre del PC de forma segura.
-    Detecta el nombre actual y permite cambiarlo a uno más descriptivo.
+    Detecta el nombre actual y permite cambiarlo a uno mÃ¡s descriptivo.
     Requiere reinicio del equipo para aplicar cambios.
 .NOTES
     Requiere permisos de administrador
@@ -25,7 +29,7 @@ param(
     [string]$nuevoNombre
 )
 
-# Detectar ubicación del dashboard para rutas relativas
+# Detectar ubicaciÃ³n del dashboard para rutas relativas
 if (-not $Global:DashboardRoot) {
     $Global:DashboardRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 }
@@ -43,7 +47,7 @@ try {
     $nombreActual = $env:COMPUTERNAME
     Write-DashboardLog -Message "Nombre actual del PC: $nombreActual" -Level "Info" -Component "Cambiar-Nombre-PC"
     
-    # Validar que se proporcionó un nuevo nombre
+    # Validar que se proporcionÃ³ un nuevo nombre
     if ([string]::IsNullOrWhiteSpace($nuevoNombre)) {
         throw "Debes ingresar un nuevo nombre para el PC"
     }
@@ -53,7 +57,7 @@ try {
     
     # Validar formato del nombre usando utilidad
     if (-not (Test-ValidPCName -PCName $nuevoNombre)) {
-        throw "Nombre inválido. Debe tener 1-15 caracteres alfanuméricos y guiones. No puede empezar o terminar con guión."
+        throw "Nombre invÃ¡lido. Debe tener 1-15 caracteres alfanumÃ©ricos y guiones. No puede empezar o terminar con guiÃ³n."
     }
     
     # Verificar si el nombre es diferente al actual
@@ -86,3 +90,4 @@ try {
         Message = "Error: $errorMsg"
     }
 }
+
